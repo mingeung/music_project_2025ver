@@ -1,10 +1,10 @@
 package com.example.music_project.dto;
 
-public class MonthMostPlaying {
+public class MostPlaying {
     public String trackId;
     public Long count;
 
-    public MonthMostPlaying(String trackId, Long count) {
+    public MostPlaying(String trackId, Long count) {
         this.trackId = trackId;
         this.count = count;
     }

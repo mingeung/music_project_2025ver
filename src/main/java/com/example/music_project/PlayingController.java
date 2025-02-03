@@ -4,7 +4,7 @@ import com.example.music_project.domain.Playing;
 import com.example.music_project.dto.GetMonthMostPlayingResponse;
 import com.example.music_project.dto.GetPlayingRequest;
 import com.example.music_project.dto.GetPlayingResponse;
-import com.example.music_project.dto.MonthMostPlaying;
+import com.example.music_project.dto.MostPlaying;
 import com.example.music_project.dto.PostPlayingRequest;
 import com.example.music_project.service.PlayingService;
 import lombok.AllArgsConstructor;
@@ -43,21 +43,21 @@ public class PlayingController {
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
     }
 
-    //getDto 원래대로 하고 MonthDTO 새로 만들기
-    @GetMapping("/month-most-playing")
+
+    @GetMapping("/most-month-playing")
     public ResponseEntity<GetMonthMostPlayingResponse> getMonthPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
-        List<MonthMostPlaying> monthPlaying = playingRepository.getMonthPlaying(getPlayingRequest.memberId);
+        List<MostPlaying> monthPlaying = playingRepository.getMonthPlaying(getPlayingRequest.memberId);
         GetMonthMostPlayingResponse getPlayingResponse = new GetMonthMostPlayingResponse(monthPlaying);
 
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
     }
 
-//    @GetMapping("/week-playing")
-//    public ResponseEntity<GetPlayingResponse> getWeekPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
-//        List<Playing> weekPlaying = playingRepository.getWeekPlaying(getPlayingRequest.memberId);
-//        GetPlayingResponse getPlayingResponse = new GetPlayingResponse(weekPlaying);
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
-//    }
+    @GetMapping("/most-week-playing")
+    public ResponseEntity<GetMonthMostPlayingResponse> getWeekPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
+        List<MostPlaying> weekPlaying = playingRepository.getWeekPlaying(getPlayingRequest.memberId);
+        GetMonthMostPlayingResponse getPlayingResponse = new GetMonthMostPlayingResponse(weekPlaying);
+
+        return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
+    }
 
 }

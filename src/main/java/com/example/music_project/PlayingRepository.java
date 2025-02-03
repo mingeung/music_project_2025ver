@@ -3,7 +3,8 @@ package com.example.music_project;
 
 import com.example.music_project.domain.Member;
 import com.example.music_project.domain.Playing;
-import com.example.music_project.dto.MonthMostPlaying;
+import com.example.music_project.dto.MostPlaying;
+import com.example.music_project.dto.MostPlaying;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -48,18 +49,18 @@ public class PlayingRepository {
         return allPlaying;
     }
     //이번달 가장 많이 들은 곡
-    public List<MonthMostPlaying> getMonthPlaying(Long memberId) {
+    public List<MostPlaying> getMonthPlaying(Long memberId) {
         int currentMonth = LocalDate.now().getMonthValue();
         int currentYear = LocalDate.now().getYear();
 
-        List<MonthMostPlaying> monthPlaying = em.createQuery(
+        List<MostPlaying> monthPlaying = em.createQuery(
                 "select f.trackId, count(f.trackId) as playCount from Playing f " +
                         "where f.member.id = :memberId " +
                         "and YEAR(f.date) = :currentYear " +
                         "and MONTH(f.date) = :currentMonth " +
                         "group by f.trackId " +
                         "order by playCount desc"
-                        , MonthMostPlaying.class)
+                        , MostPlaying.class)
                 .setParameter("memberId", memberId)
                 .setParameter("currentYear", currentYear)
                 .setParameter("currentMonth", currentMonth)
@@ -69,7 +70,7 @@ public class PlayingRepository {
     }
 
     //주간 들은 곡
-    public List<Playing> getWeekPlaying(Long memberId) {
+    public List<MostPlaying> getWeekPlaying(Long memberId) {
         LocalDate now = LocalDate.now();
 
         // 이번 주의 시작(월요일)과 끝(일요일) 계산
@@ -80,17 +81,21 @@ public class PlayingRepository {
         int currentMonth = LocalDate.now().getMonthValue();
         int currentYear = LocalDate.now().getYear();
 
-        List<Playing> weekPlaying = em.createQuery(
-                        "select f from Playing f " +
+        List<MostPlaying> weekPlaying = em.createQuery(
+                        "select f.trackId, count(f.trackId) as playCount from Playing f " +
                                 "where f.member.id = :memberId " +
                                 "and f.date BETWEEN :startOfWeek AND :endOfWeek " +
                                 "and YEAR(f.date) = :currentYear " +
-                                "and MONTH(f.date) = :currentMonth", Playing.class)
+                                "and MONTH(f.date) = :currentMonth " +
+                                "group by f.trackId " +
+                                "order by playCount desc"
+                        , MostPlaying.class)
                 .setParameter("memberId", memberId)
                 .setParameter("startOfWeek", startOfWeek)
                 .setParameter("endOfWeek", endOfWeek)
                 .setParameter("currentYear", currentYear)
                 .setParameter("currentMonth", currentMonth)
+                .setMaxResults(1)
                 .getResultList();
 
         return weekPlaying;
