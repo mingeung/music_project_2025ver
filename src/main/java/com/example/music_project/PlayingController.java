@@ -1,6 +1,7 @@
 package com.example.music_project;
 
 import com.example.music_project.domain.Playing;
+import com.example.music_project.dto.GetMonthMostPlayingResponse;
 import com.example.music_project.dto.GetPlayingRequest;
 import com.example.music_project.dto.GetPlayingResponse;
 import com.example.music_project.dto.MonthMostPlaying;
@@ -34,19 +35,19 @@ public class PlayingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(trackId);
     }
 
-//    @GetMapping("/playing")
-//    public ResponseEntity<GetPlayingResponse> getAllPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
-//        List<Playing> allPlaying = playingRepository.getAllPlaying(getPlayingRequest.memberId);
-//        GetPlayingResponse getPlayingResponse = new GetPlayingResponse(allPlaying);
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
-//    }
+    @GetMapping("/playing")
+    public ResponseEntity<GetPlayingResponse> getAllPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
+        List<Playing> allPlaying = playingRepository.getAllPlaying(getPlayingRequest.memberId);
+        GetPlayingResponse getPlayingResponse = new GetPlayingResponse(allPlaying);
+
+        return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
+    }
 
     //getDto 원래대로 하고 MonthDTO 새로 만들기
-    @GetMapping("/month-playing")
-    public ResponseEntity<GetPlayingResponse> getMonthPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
+    @GetMapping("/month-most-playing")
+    public ResponseEntity<GetMonthMostPlayingResponse> getMonthPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
         List<MonthMostPlaying> monthPlaying = playingRepository.getMonthPlaying(getPlayingRequest.memberId);
-        GetPlayingResponse getPlayingResponse = new GetPlayingResponse(monthPlaying);
+        GetMonthMostPlayingResponse getPlayingResponse = new GetMonthMostPlayingResponse(monthPlaying);
 
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
     }

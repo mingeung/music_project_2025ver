@@ -47,7 +47,7 @@ public class PlayingRepository {
 
         return allPlaying;
     }
-    //월간 들은 곡
+    //이번달 가장 많이 들은 곡
     public List<MonthMostPlaying> getMonthPlaying(Long memberId) {
         int currentMonth = LocalDate.now().getMonthValue();
         int currentYear = LocalDate.now().getYear();
