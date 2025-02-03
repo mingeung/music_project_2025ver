@@ -5,9 +5,9 @@ import com.example.music_project.domain.Playing;
 import java.util.List;
 
 public class GetPlayingResponse {
-    public List<Playing> playingList;
+    public List<MonthMostPlaying> playingList;
 
-    public GetPlayingResponse(List<Playing> playingList) {
+    public GetPlayingResponse(List<MonthMostPlaying> playingList) {
         this.playingList = playingList;
     }
 }

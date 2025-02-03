@@ -3,6 +3,7 @@ package com.example.music_project;
 
 import com.example.music_project.domain.Member;
 import com.example.music_project.domain.Playing;
+import com.example.music_project.dto.MonthMostPlaying;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Repository // 이 파일이 리포지토리라는 것을 표시해줌
 @AllArgsConstructor //생성자가 모두 있는 것과 같은 효과
@@ -44,25 +47,28 @@ public class PlayingRepository {
 
         return allPlaying;
     }
-    //월간 많이 들은 곡
-    public List<Playing> getMonthPlaying(Long memberId) {
+    //월간 들은 곡
+    public List<MonthMostPlaying> getMonthPlaying(Long memberId) {
         int currentMonth = LocalDate.now().getMonthValue();
         int currentYear = LocalDate.now().getYear();
 
-        List<Playing> monthPlaying = em.createQuery(
-                "select f from Playing f " +
+        List<MonthMostPlaying> monthPlaying = em.createQuery(
+                "select f.trackId, count(f.trackId) as playCount from Playing f " +
                         "where f.member.id = :memberId " +
                         "and YEAR(f.date) = :currentYear " +
-                        "and MONTH(f.date) = :currentMonth", Playing.class)
+                        "and MONTH(f.date) = :currentMonth " +
+                        "group by f.trackId " +
+                        "order by playCount desc"
+                        , MonthMostPlaying.class)
                 .setParameter("memberId", memberId)
                 .setParameter("currentYear", currentYear)
                 .setParameter("currentMonth", currentMonth)
+                .setMaxResults(1) // 가장 많이 들은 곡 1개
                 .getResultList();
-
         return monthPlaying;
     }
 
-    //주간 많이 들은 곡
+    //주간 들은 곡
     public List<Playing> getWeekPlaying(Long memberId) {
         LocalDate now = LocalDate.now();
 
