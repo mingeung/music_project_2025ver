@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,11 +34,28 @@ public class PlayingRepository {
         return trackId;
     }
 
-    public List<Playing> getAllPlaying(Long memberId) {
-        List<Playing> allPlaying = em.createQuery("select f from Playing f where f.member.id = :memberId", Playing.class)
+//    public List<Playing> getAllPlaying(Long memberId) {
+//        List<Playing> allPlaying = em.createQuery("select f from Playing f where f.member.id = :memberId", Playing.class)
+//                .setParameter("memberId", memberId)
+//                .getResultList();
+//
+//        return allPlaying;
+//    }
+    //월간 많이 들은 곡
+    public List<Playing> getMonthPlaying(Long memberId) {
+        int currentMonth = LocalDate.now().getMonthValue();
+        int currentYear = LocalDate.now().getYear();
+
+        List<Playing> monthPlaying = em.createQuery(
+                "select f from Playing f " +
+                        "where f.member.id = :memberId " +
+                        "and YEAR(f.date) = :currentYear " +
+                        "and MONTH(f.date) = :currentMonth", Playing.class)
                 .setParameter("memberId", memberId)
+                .setParameter("currentYear", currentYear)
+                .setParameter("currentMonth", currentMonth)
                 .getResultList();
 
-        return allPlaying;
+        return monthPlaying;
     }
 }

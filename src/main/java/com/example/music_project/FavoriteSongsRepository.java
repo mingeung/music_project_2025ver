@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -31,13 +32,13 @@ public class FavoriteSongsRepository {
     }
 
     public List<FavoriteSongs> getAllFavoriteSongs(Long memberId) {
-
         //jpql
         List<FavoriteSongs> allFavoriteSongs = em.createQuery("select f from FavoriteSongs f where f.member.id = :memberId",FavoriteSongs.class)
                 .setParameter("memberId", memberId)
                 .getResultList();
 
         return allFavoriteSongs;
-
     }
+
+
 }

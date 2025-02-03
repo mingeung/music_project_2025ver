@@ -29,8 +29,6 @@ public class FavoriteSongsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(trackId); //프론트에서 확인하는 내용
     }
 
-
-
     @GetMapping("/favoritesongs")
     public ResponseEntity<GetFavoriteSongsResponse> getAllFavoriteSongs(@RequestBody GetFavoriteSongsRequest getFavoriteSongsRequest) {
 
