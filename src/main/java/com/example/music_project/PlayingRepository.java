@@ -34,13 +34,13 @@ public class PlayingRepository {
         return trackId;
     }
 
-//    public List<Playing> getAllPlaying(Long memberId) {
-//        List<Playing> allPlaying = em.createQuery("select f from Playing f where f.member.id = :memberId", Playing.class)
-//                .setParameter("memberId", memberId)
-//                .getResultList();
-//
-//        return allPlaying;
-//    }
+    public List<Playing> getAllPlaying(Long memberId) {
+        List<Playing> allPlaying = em.createQuery("select f from Playing f where f.member.id = :memberId", Playing.class)
+                .setParameter("memberId", memberId)
+                .getResultList();
+
+        return allPlaying;
+    }
     //월간 많이 들은 곡
     public List<Playing> getMonthPlaying(Long memberId) {
         int currentMonth = LocalDate.now().getMonthValue();

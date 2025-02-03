@@ -36,4 +36,12 @@ public class PlayingController {
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
     }
 
+    @GetMapping("/month-most-playing")
+    public ResponseEntity<GetPlayingResponse> getMonthPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
+        List<Playing> monthPlaying = playingRepository.getMonthPlaying(getPlayingRequest.memberId);
+        GetPlayingResponse getPlayingResponse = new GetPlayingResponse(monthPlaying);
+
+        return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
+    }
+
 }
