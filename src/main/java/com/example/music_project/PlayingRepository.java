@@ -8,8 +8,11 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Repository // 이 파일이 리포지토리라는 것을 표시해줌
@@ -57,5 +60,33 @@ public class PlayingRepository {
                 .getResultList();
 
         return monthPlaying;
+    }
+
+    //주간 많이 들은 곡
+    public List<Playing> getWeekPlaying(Long memberId) {
+        LocalDate now = LocalDate.now();
+
+        // 이번 주의 시작(월요일)과 끝(일요일) 계산
+        LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay(); // 월요일 00:00:00
+        LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).atTime(LocalTime.MAX);
+
+
+        int currentMonth = LocalDate.now().getMonthValue();
+        int currentYear = LocalDate.now().getYear();
+
+        List<Playing> weekPlaying = em.createQuery(
+                        "select f from Playing f " +
+                                "where f.member.id = :memberId " +
+                                "and f.date BETWEEN :startOfWeek AND :endOfWeek " +
+                                "and YEAR(f.date) = :currentYear " +
+                                "and MONTH(f.date) = :currentMonth", Playing.class)
+                .setParameter("memberId", memberId)
+                .setParameter("startOfWeek", startOfWeek)
+                .setParameter("endOfWeek", endOfWeek)
+                .setParameter("currentYear", currentYear)
+                .setParameter("currentMonth", currentMonth)
+                .getResultList();
+
+        return weekPlaying;
     }
 }
