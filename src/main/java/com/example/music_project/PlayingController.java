@@ -59,11 +59,9 @@ public class PlayingController {
 
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
     }
-    @GetMapping("/spotifyApi")
+    @GetMapping("/spotifyApiAccessToken")
     public ResponseEntity<?> getSpotifyApi() {
         return ResponseEntity.status(HttpStatus.OK).body(spotifyAuthService.accessToken());
-
-
     }
 
 }
