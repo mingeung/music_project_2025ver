@@ -16,10 +16,10 @@ import java.io.IOException;
 @AllArgsConstructor
 
 public class SpotifyAuthService {
-    private static final String CLINET_ID = "8a0fd00ee8c6474d8f0152da30661e0b";
+    private static final String CLIENT_ID = "8a0fd00ee8c6474d8f0152da30661e0b";
     private static final String CLIENT_SECRET = "788ec06786be408bad8b494c42ed4d56";
 
-    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId(CLINET_ID).setClientSecret(CLIENT_SECRET).build();
+    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId(CLIENT_ID).setClientSecret(CLIENT_SECRET).build();
 
     public String accessToken() {
         ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials().build();
@@ -34,4 +34,5 @@ public class SpotifyAuthService {
              return "error";
          }
     }
+
 }

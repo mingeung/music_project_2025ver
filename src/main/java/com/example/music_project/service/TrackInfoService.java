@@ -15,7 +15,7 @@ public class TrackInfoService {
 
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer" + accessToken);
+        headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Host", "api.spotify.com");//이건 왜 붙이는지 ?
         headers.add("Content-Type", "application/json");
         String body = "";
@@ -29,8 +29,6 @@ public class TrackInfoService {
         System.out.println(response);
 
         return response;
-
-
 
     }
 }
