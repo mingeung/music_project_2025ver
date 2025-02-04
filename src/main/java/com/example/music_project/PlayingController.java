@@ -7,22 +7,23 @@ import com.example.music_project.dto.GetPlayingResponse;
 import com.example.music_project.dto.MostPlaying;
 import com.example.music_project.dto.PostPlayingRequest;
 import com.example.music_project.service.PlayingService;
+import com.example.music_project.service.SpotifyAuthService;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController //이 파일이 컨트롤러라는 것을 알려줌
 @AllArgsConstructor //생성자를 모두 만든 것과 같은 것
 
 public class PlayingController {
-
     PlayingRepository playingRepository;
+    SpotifyAuthService spotifyAuthService;
 
     private PlayingService playingService;
 
@@ -43,7 +44,6 @@ public class PlayingController {
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
     }
 
-
     @GetMapping("/most-month-playing")
     public ResponseEntity<GetMonthMostPlayingResponse> getMonthPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
         List<MostPlaying> monthPlaying = playingRepository.getMonthPlaying(getPlayingRequest.memberId);
@@ -58,6 +58,12 @@ public class PlayingController {
         GetMonthMostPlayingResponse getPlayingResponse = new GetMonthMostPlayingResponse(weekPlaying);
 
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
+    }
+    @GetMapping("/spotifyApi")
+    public ResponseEntity<?> getSpotifyApi() {
+        return ResponseEntity.status(HttpStatus.OK).body(spotifyAuthService.accessToken());
+
+
     }
 
 }

@@ -31,7 +31,16 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'se.michaelthelin.spotify:spotify-web-api-java:9.1.1' //spotify api
+
 }
+
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 
 tasks.named('test') {
     useJUnitPlatform()
