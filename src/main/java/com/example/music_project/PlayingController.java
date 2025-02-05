@@ -1,11 +1,8 @@
 package com.example.music_project;
 
 import com.example.music_project.domain.Playing;
-import com.example.music_project.dto.GetMonthMostPlayingResponse;
-import com.example.music_project.dto.GetPlayingRequest;
-import com.example.music_project.dto.GetPlayingResponse;
-import com.example.music_project.dto.MostPlaying;
-import com.example.music_project.dto.PostPlayingRequest;
+import com.example.music_project.dto.*;
+import com.example.music_project.dto.MostPlayedTrack;
 import com.example.music_project.service.PlayingService;
 import com.example.music_project.service.SpotifyAuthService;
 import lombok.AllArgsConstructor;
@@ -46,19 +43,19 @@ public class PlayingController {
 
     @GetMapping("/most-month-playing")
     public ResponseEntity<GetMonthMostPlayingResponse> getMonthPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
-        List<MostPlaying> monthPlaying = playingRepository.getMonthPlaying(getPlayingRequest.memberId);
-        GetMonthMostPlayingResponse getPlayingResponse = new GetMonthMostPlayingResponse(monthPlaying);
+        List<MostPlayedTrack> monthPlayedTrack = playingRepository.getMonthPlayedTrack(getPlayingRequest.memberId);
+        GetMonthMostPlayingResponse getPlayingResponse = new GetMonthMostPlayingResponse(monthPlayedTrack);
 
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
     }
 
-    @GetMapping("/most-week-playing")
-    public ResponseEntity<GetMonthMostPlayingResponse> getWeekPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
-        List<MostPlaying> weekPlaying = playingRepository.getWeekPlaying(getPlayingRequest.memberId);
-        GetMonthMostPlayingResponse getPlayingResponse = new GetMonthMostPlayingResponse(weekPlaying);
-
-        return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
-    }
+//    @GetMapping("/most-week-playing")
+//    public ResponseEntity<GetMonthMostPlayingResponse> getWeekPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
+//        List<MostPlayedTrack> weekPlaying = playingRepository.getWeekPlaying(getPlayingRequest.memberId);
+//        GetMonthMostPlayingResponse getPlayingResponse = new GetMonthMostPlayingResponse(weekPlaying);
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
+//    }
     @GetMapping("/spotifyApiAccessToken")
     public ResponseEntity<?> getSpotifyApi() {
         return ResponseEntity.status(HttpStatus.OK).body(spotifyAuthService.accessToken());

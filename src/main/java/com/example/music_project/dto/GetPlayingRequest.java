@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class GetPlayingRequest {
     public Long memberId;
 
-    public GetPlayingRequest(String trackId, Long memberId, LocalDateTime data) {
+    public GetPlayingRequest(String trackId, Long memberId, LocalDateTime data, String artistId) {
         this.memberId = memberId;
     }
 }

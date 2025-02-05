@@ -3,8 +3,7 @@ package com.example.music_project;
 
 import com.example.music_project.domain.Member;
 import com.example.music_project.domain.Playing;
-import com.example.music_project.dto.MostPlaying;
-import com.example.music_project.dto.MostPlaying;
+import com.example.music_project.dto.MostPlayedTrack;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -49,55 +48,58 @@ public class PlayingRepository {
         return allPlaying;
     }
     //이번달 가장 많이 들은 곡
-    public List<MostPlaying> getMonthPlaying(Long memberId) {
+    public List<MostPlayedTrack> getMonthPlayedTrack(Long memberId) {
         int currentMonth = LocalDate.now().getMonthValue();
         int currentYear = LocalDate.now().getYear();
 
-        List<MostPlaying> monthPlaying = em.createQuery(
+        List<MostPlayedTrack> monthPlayedTrack = em.createQuery(
                 "select f.trackId, count(f.trackId) as playCount from Playing f " +
                         "where f.member.id = :memberId " +
                         "and YEAR(f.date) = :currentYear " +
                         "and MONTH(f.date) = :currentMonth " +
                         "group by f.trackId " +
                         "order by playCount desc"
-                        , MostPlaying.class)
+                        , MostPlayedTrack.class)
                 .setParameter("memberId", memberId)
                 .setParameter("currentYear", currentYear)
                 .setParameter("currentMonth", currentMonth)
                 .setMaxResults(1) // 가장 많이 들은 곡 1개
                 .getResultList();
-        return monthPlaying;
+        return monthPlayedTrack;
     }
+
+    //이번달 가장 많이 들은 아티스트
+
 
     //주간 들은 곡
-    public List<MostPlaying> getWeekPlaying(Long memberId) {
-        LocalDate now = LocalDate.now();
-
-        // 이번 주의 시작(월요일)과 끝(일요일) 계산
-        LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay(); // 월요일 00:00:00
-        LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).atTime(LocalTime.MAX);
-
-
-        int currentMonth = LocalDate.now().getMonthValue();
-        int currentYear = LocalDate.now().getYear();
-
-        List<MostPlaying> weekPlaying = em.createQuery(
-                        "select f.trackId, count(f.trackId) as playCount from Playing f " +
-                                "where f.member.id = :memberId " +
-                                "and f.date BETWEEN :startOfWeek AND :endOfWeek " +
-                                "and YEAR(f.date) = :currentYear " +
-                                "and MONTH(f.date) = :currentMonth " +
-                                "group by f.trackId " +
-                                "order by playCount desc"
-                        , MostPlaying.class)
-                .setParameter("memberId", memberId)
-                .setParameter("startOfWeek", startOfWeek)
-                .setParameter("endOfWeek", endOfWeek)
-                .setParameter("currentYear", currentYear)
-                .setParameter("currentMonth", currentMonth)
-                .setMaxResults(1)
-                .getResultList();
-
-        return weekPlaying;
-    }
+//    public List<MostPlaying> getWeekPlaying(Long memberId) {
+//        LocalDate now = LocalDate.now();
+//
+//        // 이번 주의 시작(월요일)과 끝(일요일) 계산
+//        LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay(); // 월요일 00:00:00
+//        LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).atTime(LocalTime.MAX);
+//
+//
+//        int currentMonth = LocalDate.now().getMonthValue();
+//        int currentYear = LocalDate.now().getYear();
+//
+//        List<MostPlaying> weekPlaying = em.createQuery(
+//                        "select f.trackId, count(f.trackId) as playCount from Playing f " +
+//                                "where f.member.id = :memberId " +
+//                                "and f.date BETWEEN :startOfWeek AND :endOfWeek " +
+//                                "and YEAR(f.date) = :currentYear " +
+//                                "and MONTH(f.date) = :currentMonth " +
+//                                "group by f.trackId " +
+//                                "order by playCount desc"
+//                        , MostPlaying.class)
+//                .setParameter("memberId", memberId)
+//                .setParameter("startOfWeek", startOfWeek)
+//                .setParameter("endOfWeek", endOfWeek)
+//                .setParameter("currentYear", currentYear)
+//                .setParameter("currentMonth", currentMonth)
+//                .setMaxResults(1)
+//                .getResultList();
+//
+//        return weekPlaying;
+//    }
 }
