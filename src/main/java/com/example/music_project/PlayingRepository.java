@@ -3,6 +3,7 @@ package com.example.music_project;
 
 import com.example.music_project.domain.Member;
 import com.example.music_project.domain.Playing;
+import com.example.music_project.dto.MostPlayedArtist;
 import com.example.music_project.dto.MostPlayedTrack;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -69,6 +70,25 @@ public class PlayingRepository {
     }
 
     //이번달 가장 많이 들은 아티스트
+    public List<MostPlayedArtist> getMonthPlayedArtist(Long memberId) {
+        int currentMonth = LocalDate.now().getMonthValue();
+        int currentYear = LocalDate.now().getYear();
+
+        List<MostPlayedArtist> monthPlayedArtist = em.createQuery(
+                        "select f.artistId, count(f.artistId) as playCount from Playing f " +
+                                "where f.member.id = :memberId " +
+                                "and YEAR(f.date) = :currentYear " +
+                                "and MONTH(f.date) = :currentMonth " +
+                                "group by f.artistId " +
+                                "order by playCount desc"
+                        , MostPlayedArtist.class)
+                .setParameter("memberId", memberId)
+                .setParameter("currentYear", currentYear)
+                .setParameter("currentMonth", currentMonth)
+                .setMaxResults(1) // 가장 많이 들은 곡 1개
+                .getResultList();
+        return monthPlayedArtist;
+    }
 
 
     //주간 들은 곡
