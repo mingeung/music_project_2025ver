@@ -9,14 +9,13 @@ import lombok.AllArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController //이 파일이 컨트롤러라는 것을 알려줌
 @AllArgsConstructor //생성자를 모두 만든 것과 같은 것
+@CrossOrigin(origins = "http://localhost:3000")
 
 public class PlayingController {
     PlayingRepository playingRepository;
@@ -49,9 +48,9 @@ public class PlayingController {
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
     }
 
-    @GetMapping("/most-month-played-artist")
-    public ResponseEntity<GetMonthMostPlayedArtistResponse> getMonthPlayedArtist(@RequestBody GetPlayingRequest getPlayingRequest) {
-        List<MostPlayedArtist> monthPlayedArtist = playingRepository.getMonthPlayedArtist(getPlayingRequest.memberId);
+    @GetMapping("/most-month-played-artist/{memberId}")
+    public ResponseEntity<GetMonthMostPlayedArtistResponse> getMonthPlayedArtist(@PathVariable Long memberId) {
+        List<MostPlayedArtist> monthPlayedArtist = playingRepository.getMonthPlayedArtist(memberId);
         GetMonthMostPlayedArtistResponse getPlayingResponse = new GetMonthMostPlayedArtistResponse(monthPlayedArtist);
 
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);

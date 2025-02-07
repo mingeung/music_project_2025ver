@@ -27,9 +27,10 @@ public class PlayingRepository {
     public EntityManager em; //entity(테이블)을 관리
     @Transactional //오류가 나면 처음부터 다시
 
-    public String addToPlaying(String trackId, Long memberId, LocalDateTime date) {
+    public String addToPlaying(String trackId, Long memberId, LocalDateTime date, String artistId) {
         Playing playing = new Playing(); //테이블 클래스 인스턴스 만들기
         playing.trackId = trackId;
+        playing.artistId = artistId;
 
         Member member = em.find(Member.class, memberId); //String으로 받아온 memberId를 Member class로 바꿔주기
         playing.member = member;

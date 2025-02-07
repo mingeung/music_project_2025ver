@@ -14,7 +14,7 @@ public class PlayingService {
     private PlayingRepository playingRepository;
 
     public String addToPlay(PostPlayingRequest postPlayingRequest) {
-        String trackId = playingRepository.addToPlaying(postPlayingRequest.trackId, postPlayingRequest.memberId, postPlayingRequest.date);
+        String trackId = playingRepository.addToPlaying(postPlayingRequest.trackId, postPlayingRequest.memberId, postPlayingRequest.date, postPlayingRequest.artistId);
         return trackId;
     }
 }
