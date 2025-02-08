@@ -24,7 +24,6 @@ public class PlayingController {
     private PlayingService playingService;
 
     @PostMapping("/playing")
-
     public ResponseEntity<?> addToPlaying(@RequestBody PostPlayingRequest postPlayingRequest) {
 
         String trackId = playingService.addToPlay(postPlayingRequest);

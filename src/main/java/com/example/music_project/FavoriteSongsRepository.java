@@ -3,8 +3,12 @@ package com.example.music_project;
 import com.example.music_project.domain.FavoriteSongs;
 import com.example.music_project.domain.Member;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -38,6 +42,19 @@ public class FavoriteSongsRepository {
                 .getResultList();
 
         return allFavoriteSongs;
+    }
+
+
+    public String deleteFromFavoriteSongs(Long memberId, String trackId) {
+
+        Query query = em.createQuery("DELETE FROM FavoriteSongs f WHERE f.trackId = :trackId AND f.member.id = :memberId")
+                 .setParameter("memberId", memberId)
+                 .setParameter("trackId", trackId);
+
+        int deletedCount = query.executeUpdate();
+
+        return deletedCount > 0 ? "삭제 성공" : "삭제 실패";
+
     }
 
 

@@ -6,23 +6,22 @@ import com.example.music_project.service.TrackInfoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 
 public class TrackInfoController {
     TrackInfoService trackInfoService;
 
-    @GetMapping("/artist-info")
-    public ResponseEntity<?> getArtistInfo(@RequestBody GetArtistInfoRequest getArtistInfoRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(trackInfoService.getArtistInfo(getArtistInfoRequest.accessToken, getArtistInfoRequest.artistId));
+    @GetMapping("/artist-info/{artistId}")
+    public ResponseEntity<?> getArtistInfo(@PathVariable String artistId) {
+        return ResponseEntity.status(HttpStatus.OK).body(trackInfoService.getArtistInfo(artistId));
     }
 
-    @GetMapping("/track-info")
-    public ResponseEntity<?> getTrackInfo(@RequestBody GetTrackInfoRequest getTrackInfoRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(trackInfoService.getTrackInfo(getTrackInfoRequest.accessToken, getTrackInfoRequest.trackId));
+    @GetMapping("/track-info/{trackId}")
+    public ResponseEntity<?> getTrackInfo(@PathVariable String trackId) {
+        return ResponseEntity.status(HttpStatus.OK).body(trackInfoService.getTrackInfo(trackId));
     }
 }

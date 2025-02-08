@@ -2,16 +2,15 @@ package com.example.music_project;
 
 
 import com.example.music_project.domain.FavoriteSongs;
+import com.example.music_project.dto.DeleteFavoriteSongRequest;
 import com.example.music_project.dto.GetFavoriteSongsRequest;
 import com.example.music_project.dto.GetFavoriteSongsResponse;
 import com.example.music_project.dto.PostFavoriteSongRequest;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,5 +35,12 @@ public class FavoriteSongsController {
         GetFavoriteSongsResponse getFavoriteSongsResponse = new GetFavoriteSongsResponse(allFavoriteSongs);
 
         return ResponseEntity.status(HttpStatus.OK).body(getFavoriteSongsResponse);
+    }
+    @Transactional
+    @DeleteMapping("favoritesongs")
+    public ResponseEntity<?> deleteFromFavoriteSongs(@RequestBody DeleteFavoriteSongRequest deleteFavoriteSongRequest) {
+
+        String result = favoriteSongsRepository.deleteFromFavoriteSongs(deleteFavoriteSongRequest.memberId, deleteFavoriteSongRequest.trackId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

@@ -8,6 +8,7 @@ import com.example.music_project.dto.MostPlayedTrack;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
 import java.time.DayOfWeek;
@@ -21,7 +22,7 @@ import java.util.Objects;
 
 @Repository // 이 파일이 리포지토리라는 것을 표시해줌
 @AllArgsConstructor //생성자가 모두 있는 것과 같은 효과
-
+@Log4j2
 public class PlayingRepository {
 
     public EntityManager em; //entity(테이블)을 관리
@@ -32,6 +33,8 @@ public class PlayingRepository {
         playing.trackId = trackId;
         playing.artistId = artistId;
 
+        log.info("trackId: "+ trackId);
+        log.info("회원Id: "+ memberId);
         Member member = em.find(Member.class, memberId); //String으로 받아온 memberId를 Member class로 바꿔주기
         playing.member = member;
 

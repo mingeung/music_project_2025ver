@@ -5,13 +5,18 @@ import lombok.AllArgsConstructor;
 import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 @AllArgsConstructor
 
 public class TrackInfoService {
-    public String getArtistInfo(String accessToken, String artistId) {
+    SpotifyAuthService spotifyAuthService;
+
+    public String getArtistInfo(String artistId) {
+
+        String accessToken = spotifyAuthService.accessToken();
 
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -31,7 +36,9 @@ public class TrackInfoService {
         return response;
     }
 
-    public String getTrackInfo(String accessToken, String trackId) {
+    public String getTrackInfo(String trackId) {
+
+        String accessToken = spotifyAuthService.accessToken();
 
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
