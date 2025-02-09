@@ -2,6 +2,8 @@ package com.example.music_project;
 
 import com.example.music_project.domain.FavoriteSongs;
 import com.example.music_project.domain.Member;
+import com.example.music_project.exception.CustomException;
+import com.example.music_project.exception.ErrorCode;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
@@ -9,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -53,9 +56,21 @@ public class FavoriteSongsRepository {
 
         int deletedCount = query.executeUpdate();
 
-        return deletedCount > 0 ? "삭제 성공" : "삭제 실패";
+        if (deletedCount <= 0) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
 
+    return "삭제 성공";
+        //        return deletedCount > 0 ? "삭제 성공" : "삭제 실패";
     }
 
+    public HttpStatus except() {
+//        try {
+//            throw new IllegalArgumentException("test");
+//        } catch (IllegalArgumentException e) {
+//            return HttpStatus.OK;
+//        }
+        throw new RuntimeException("test");
+    }
 
 }
