@@ -6,6 +6,7 @@ import com.example.music_project.exception.CustomException;
 import com.example.music_project.exception.ErrorCode;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -48,7 +49,8 @@ public class FavoriteSongsRepository {
     }
 
 
-    public String deleteFromFavoriteSongs(Long memberId, String trackId) {
+
+    public String deleteFromFavoriteSongs(String memberId, String trackId) {
 
         Query query = em.createQuery("DELETE FROM FavoriteSongs f WHERE f.trackId = :trackId AND f.member.id = :memberId")
                  .setParameter("memberId", memberId)
@@ -72,5 +74,19 @@ public class FavoriteSongsRepository {
 //        }
         throw new RuntimeException("test");
     }
+
+    //이미 있는 노래인지 확인
+    public boolean isAlreadyFavoriteSong(String trackId, Long memberId) {
+        String jpql = "SELECT COUNT(f) FROM FavoriteSongs f WHERE f.member.id = :memberId AND f.trackId = :trackId";
+
+        TypedQuery<Long> query = em.createQuery(jpql, Long.class);
+        query.setParameter("memberId", memberId);
+        query.setParameter("trackId", trackId);
+
+        Long count = query.getSingleResult();
+        return count > 0;  // 값이 존재하면 true, 없으면 false 返還
+    }
+
+
 
 }

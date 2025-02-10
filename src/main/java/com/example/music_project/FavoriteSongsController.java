@@ -56,10 +56,17 @@ public class FavoriteSongsController {
 
 //        return ResponseEntity.status(HttpStatus.OK).body(getFavoriteSongsResponse);
     @Transactional
-    @DeleteMapping("favoritesongs")
-    public ResponseEntity<?> deleteFromFavoriteSongs(@RequestBody DeleteFavoriteSongRequest deleteFavoriteSongRequest) {
+    @DeleteMapping("/favoritesongs/{trackId}&{memberId}")
+    public ResponseEntity<?> deleteFromFavoriteSongs(@PathVariable String trackId, @PathVariable String memberId) {
 
-        String result = favoriteSongsRepository.deleteFromFavoriteSongs(deleteFavoriteSongRequest.memberId, deleteFavoriteSongRequest.trackId);
+        String result = favoriteSongsRepository.deleteFromFavoriteSongs(memberId, trackId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    //이미 보관함에 있는 노래인지 확인
+    @GetMapping("/favoritesongs/{trackId}&{memberId}")
+    public ResponseEntity<?> isAlreadyFavoriteSong(@PathVariable String trackId, @PathVariable Long memberId) {
+        boolean result = favoriteSongsRepository.isAlreadyFavoriteSong(trackId, memberId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
