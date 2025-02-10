@@ -1,11 +1,11 @@
 package com.example.music_project.dto;
 
 public class MostPlayedArtist {
-    public String artistId;
+    public String artistName;
     public Long count;
 
-    public MostPlayedArtist(String artistId, Long count) {
-        this.artistId = artistId;
+    public MostPlayedArtist(String artistName, Long count) {
+        this.artistName = artistName;
         this.count = count;
     }
 }

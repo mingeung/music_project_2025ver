@@ -14,7 +14,8 @@ public class Playing {
     public Long id;
     public LocalDateTime date;
     public String trackId;
-    public String artistId;
+    public String trackName;
+    public String artistName;
 
     @ManyToOne //다대1 관계를 맺을거다
     @JoinColumn(name = "member_id", nullable = false) //sql에 올라가는 테이블 외래키

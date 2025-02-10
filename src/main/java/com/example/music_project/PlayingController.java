@@ -39,9 +39,9 @@ public class PlayingController {
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);
     }
 
-    @GetMapping("/most-month-played-track")
-    public ResponseEntity<GetMonthMostPlayingResponse> getMonthPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
-        List<MostPlayedTrack> monthPlayedTrack = playingRepository.getMonthPlayedTrack(getPlayingRequest.memberId);
+    @GetMapping("/most-month-played-track/{memberId}")
+    public ResponseEntity<GetMonthMostPlayingResponse> getMonthPlaying(@PathVariable Long memberId) {
+        List<MostPlayedTrack> monthPlayedTrack = playingRepository.getMonthPlayedTrack(memberId);
         GetMonthMostPlayingResponse getPlayingResponse = new GetMonthMostPlayingResponse(monthPlayedTrack);
 
         return ResponseEntity.status(HttpStatus.OK).body(getPlayingResponse);

@@ -7,12 +7,14 @@ public class PostPlayingRequest {
     public String trackId;
     public Long memberId;
     public LocalDateTime date;
-    public String artistId;
+    public String artistName;
+    public String trackName;
 
-    public PostPlayingRequest(String trackId, Long memberId, LocalDateTime date, String artistId) {
+    public PostPlayingRequest(String trackId, Long memberId, LocalDateTime date, String artistName, String trackName) {
         this.trackId = trackId;
         this.memberId = memberId;
         this.date = date;
-        this.artistId = artistId;
+        this.artistName = artistName;
+        this.trackName = trackName;
     }
 }

@@ -28,10 +28,11 @@ public class PlayingRepository {
     public EntityManager em; //entity(테이블)을 관리
     @Transactional //오류가 나면 처음부터 다시
 
-    public String addToPlaying(String trackId, Long memberId, LocalDateTime date, String artistId) {
+    public String addToPlaying(String trackId, Long memberId, LocalDateTime date, String artistName, String trackName) {
         Playing playing = new Playing(); //테이블 클래스 인스턴스 만들기
         playing.trackId = trackId;
-        playing.artistId = artistId;
+        playing.trackName = trackName;
+        playing.artistName = artistName;
 
         log.info("trackId: "+ trackId);
         log.info("회원Id: "+ memberId);
@@ -58,11 +59,11 @@ public class PlayingRepository {
         int currentYear = LocalDate.now().getYear();
 
         List<MostPlayedTrack> monthPlayedTrack = em.createQuery(
-                "select f.trackId, count(f.trackId) as playCount from Playing f " +
+                "select f.trackName, count(f.trackName) as playCount from Playing f " +
                         "where f.member.id = :memberId " +
                         "and YEAR(f.date) = :currentYear " +
                         "and MONTH(f.date) = :currentMonth " +
-                        "group by f.trackId " +
+                        "group by f.trackName " +
                         "order by playCount desc"
                         , MostPlayedTrack.class)
                 .setParameter("memberId", memberId)
@@ -79,11 +80,11 @@ public class PlayingRepository {
         int currentYear = LocalDate.now().getYear();
 
         List<MostPlayedArtist> monthPlayedArtist = em.createQuery(
-                        "select f.artistId, count(f.artistId) as playCount from Playing f " +
+                        "select f.artistName, count(f.artistName) as playCount from Playing f " +
                                 "where f.member.id = :memberId " +
                                 "and YEAR(f.date) = :currentYear " +
                                 "and MONTH(f.date) = :currentMonth " +
-                                "group by f.artistId " +
+                                "group by f.artistName " +
                                 "order by playCount desc"
                         , MostPlayedArtist.class)
                 .setParameter("memberId", memberId)
