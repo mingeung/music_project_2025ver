@@ -31,6 +31,7 @@ public class PlayingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(trackId);
     }
 
+    //재생한 모든 곡을 저장
     @GetMapping("/playing")
     public ResponseEntity<GetPlayingResponse> getAllPlaying(@RequestBody GetPlayingRequest getPlayingRequest) {
         List<Playing> allPlaying = playingRepository.getAllPlaying(getPlayingRequest.memberId);

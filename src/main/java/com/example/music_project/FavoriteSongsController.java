@@ -16,6 +16,8 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
+
 public class FavoriteSongsController {
 
     FavoriteSongsRepository favoriteSongsRepository;
@@ -28,14 +30,15 @@ public class FavoriteSongsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(trackId); //프론트에서 확인하는 내용
     }
 
-    @GetMapping("/favoritesongs")
-    public ResponseEntity<GetFavoriteSongsResponse> getAllFavoriteSongs(@RequestBody GetFavoriteSongsRequest getFavoriteSongsRequest) {
+    @GetMapping("/favoritesongs/{memberId}")
+    public ResponseEntity<GetFavoriteSongsResponse> getAllFavoriteSongs(@PathVariable Long memberId) {
 
-        List<FavoriteSongs> allFavoriteSongs = favoriteSongsRepository.getAllFavoriteSongs(getFavoriteSongsRequest.memberId);
+        List<FavoriteSongs> allFavoriteSongs = favoriteSongsRepository.getAllFavoriteSongs(memberId);
         GetFavoriteSongsResponse getFavoriteSongsResponse = new GetFavoriteSongsResponse(allFavoriteSongs);
 
         return ResponseEntity.status(HttpStatus.OK).body(getFavoriteSongsResponse);
     }
+
     @GetMapping("/test")
     public HttpStatus getGet() {
         //예외
@@ -56,7 +59,7 @@ public class FavoriteSongsController {
 
 //        return ResponseEntity.status(HttpStatus.OK).body(getFavoriteSongsResponse);
     @Transactional
-    @DeleteMapping("/favoritesongs/{trackId}&{memberId}")
+    @DeleteMapping("/favoritesongs/{trackId}/{memberId}")
     public ResponseEntity<?> deleteFromFavoriteSongs(@PathVariable String trackId, @PathVariable String memberId) {
 
         String result = favoriteSongsRepository.deleteFromFavoriteSongs(memberId, trackId);
@@ -64,9 +67,11 @@ public class FavoriteSongsController {
     }
 
     //이미 보관함에 있는 노래인지 확인
-    @GetMapping("/favoritesongs/{trackId}&{memberId}")
+    @GetMapping("/favoritesongs/{trackId}/{memberId}")
     public ResponseEntity<?> isAlreadyFavoriteSong(@PathVariable String trackId, @PathVariable Long memberId) {
         boolean result = favoriteSongsRepository.isAlreadyFavoriteSong(trackId, memberId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+
 }

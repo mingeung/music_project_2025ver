@@ -24,4 +24,10 @@ public class TrackInfoController {
     public ResponseEntity<?> getTrackInfo(@PathVariable String trackId) {
         return ResponseEntity.status(HttpStatus.OK).body(trackInfoService.getTrackInfo(trackId));
     }
+
+    //여러 트랙 정보 불러오기
+    @GetMapping("/several-track-info/ids={trackIds}")
+    public ResponseEntity<?> getSeveralInfo(@PathVariable String trackIds) {
+        return ResponseEntity.status(HttpStatus.OK).body(trackInfoService.getSeveralTrackInfo(trackIds));
+    }
 }

@@ -22,11 +22,4 @@ public class SearchController {
         return ResponseEntity.status(HttpStatus.OK).body(searchService.getSearchResult(trackName));
     }
 
-//    @GetMapping("/searchResult/trackId={trackId}/play?{isPlaying}")
-//    //url이름이 고민된다. 나중에 보관함에서도 play를 할텐데 같이 쓸 걸 생각하면 searchResult를 빼는 게 맞나? 근데 searchResult 페이지에서 플레이를 하는거라...
-//    public ResponseEntity<?> getTrackPlay(@PathVariable String trackId, @PathVariable boolean isPlaying) {
-//        return ResponseEntity.status(HttpStatus.OK).body(searchService)
-//    }
-
-
 }

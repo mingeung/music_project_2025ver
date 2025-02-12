@@ -29,7 +29,6 @@ public class FavoriteSongsRepository {
     public String addToFavoriteSongs(String trackId, Long memberId) {
         FavoriteSongs favoriteSongs = new FavoriteSongs();
         favoriteSongs.trackId = trackId;
-
         //find(테이블 = 엔티티, pk)
         Member member = em.find(Member.class,memberId);
         favoriteSongs.member = member;
@@ -84,9 +83,6 @@ public class FavoriteSongsRepository {
         query.setParameter("trackId", trackId);
 
         Long count = query.getSingleResult();
-        return count > 0;  // 값이 존재하면 true, 없으면 false 返還
+        return count > 0;  // 값이 존재하면 true, 없으면 false
     }
-
-
-
 }

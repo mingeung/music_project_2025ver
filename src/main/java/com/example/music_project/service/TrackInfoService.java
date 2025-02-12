@@ -12,49 +12,40 @@ import org.springframework.web.client.RestTemplate;
 @AllArgsConstructor
 
 public class TrackInfoService {
-    SpotifyAuthService spotifyAuthService;
+    private final SpotifyAuthService spotifyAuthService;
+    private final RestTemplate restTemplate = new RestTemplate(); // RestTemplate 인스턴스 생성
 
-    public String getArtistInfo(String artistId) {
-
+    // 공통 API 요청 메서드
+    private String fetchFromSpotify(String endpoint) {
         String accessToken = spotifyAuthService.accessToken();
 
-        RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
-        headers.add("Host", "api.spotify.com");//이건 왜 붙이는지 ?
         headers.add("Content-Type", "application/json");
-        String body = "";
 
-        HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
-        ResponseEntity<String> responseEntity = rest.exchange("https://api.spotify.com/v1/artists/" + artistId, HttpMethod.GET, requestEntity, String.class);
-        HttpStatusCode httpstatus = responseEntity.getStatusCode();
-        int status = httpstatus.value();//상태코드가 들어갈 status 변수
-        String response = responseEntity.getBody();
-        System.out.println("Response status: " + status);
-        System.out.println(response);
+        HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                "https://api.spotify.com/v1/" + endpoint, HttpMethod.GET, requestEntity, String.class
+        );
 
-        return response;
+        System.out.println("Response status: " + responseEntity.getStatusCode().value());
+        System.out.println(responseEntity.getBody());
+
+        return responseEntity.getBody();
     }
 
+    // 아티스트 정보 가져오기
+    public String getArtistInfo(String artistId) {
+        return fetchFromSpotify("artists/" + artistId);
+    }
+
+    // 트랙 정보 가져오기
     public String getTrackInfo(String trackId) {
+        return fetchFromSpotify("tracks/" + trackId);
+    }
 
-        String accessToken = spotifyAuthService.accessToken();
-
-        RestTemplate rest = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
-        headers.add("Host", "api.spotify.com");//이건 왜 붙이는지 ?
-        headers.add("Content-Type", "application/json");
-        String body = "";
-
-        HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
-        ResponseEntity<String> responseEntity = rest.exchange("https://api.spotify.com/v1/tracks/" + trackId, HttpMethod.GET, requestEntity, String.class);
-        HttpStatusCode httpstatus = responseEntity.getStatusCode();
-        int status = httpstatus.value();//상태코드가 들어갈 status 변수
-        String response = responseEntity.getBody();
-        System.out.println("Response status: " + status);
-        System.out.println(response);
-
-        return response;
+    //여러 트랙 한번에 가져오기
+    public String getSeveralTrackInfo(String trackIds) {
+        return fetchFromSpotify("tracks?ids=" + trackIds);
     }
 }

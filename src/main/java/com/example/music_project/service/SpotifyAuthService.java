@@ -15,7 +15,7 @@ import java.io.IOException;
 @Service
 @AllArgsConstructor
 
-public class SpotifyAuthService {
+public class  SpotifyAuthService {
     private static final String CLIENT_ID = "8a0fd00ee8c6474d8f0152da30661e0b";
     private static final String CLIENT_SECRET = "788ec06786be408bad8b494c42ed4d56";
 
