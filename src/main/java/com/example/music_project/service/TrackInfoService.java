@@ -1,12 +1,14 @@
 package com.example.music_project.service;
 
 
+import com.example.music_project.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
+import com.example.music_project.exception.CustomException;
 
 @Service
 @AllArgsConstructor
@@ -36,12 +38,21 @@ public class TrackInfoService {
 
     // 아티스트 정보 가져오기
     public String getArtistInfo(String artistId) {
-        return fetchFromSpotify("artists/" + artistId);
+        try {
+            return fetchFromSpotify("artists/" + artistId);
+        } catch(IllegalArgumentException e) {
+            throw new CustomException(ErrorCode.ARTIST_NOT_FOUND);
+        }
     }
 
     // 트랙 정보 가져오기
     public String getTrackInfo(String trackId) {
-        return fetchFromSpotify("tracks/" + trackId);
+        try {
+            return fetchFromSpotify("tracks/" + trackId);
+        }
+        catch(IllegalArgumentException e) {
+            throw new CustomException((ErrorCode.TRACK_NOT_FOUND));
+        }
     }
 
     //여러 트랙 한번에 가져오기
