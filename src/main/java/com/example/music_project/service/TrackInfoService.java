@@ -7,6 +7,7 @@ import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import com.example.music_project.exception.CustomException;
 
@@ -40,7 +41,7 @@ public class TrackInfoService {
     public String getArtistInfo(String artistId) {
         try {
             return fetchFromSpotify("artists/" + artistId);
-        } catch(IllegalArgumentException e) {
+        } catch(HttpClientErrorException.BadRequest e) {
             throw new CustomException(ErrorCode.ARTIST_NOT_FOUND);
         }
     }
@@ -50,7 +51,7 @@ public class TrackInfoService {
         try {
             return fetchFromSpotify("tracks/" + trackId);
         }
-        catch(IllegalArgumentException e) {
+        catch(HttpClientErrorException.BadRequest e) {
             throw new CustomException((ErrorCode.TRACK_NOT_FOUND));
         }
     }
