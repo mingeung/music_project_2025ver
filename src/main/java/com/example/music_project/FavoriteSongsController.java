@@ -39,25 +39,6 @@ public class FavoriteSongsController {
         return ResponseEntity.status(HttpStatus.OK).body(getFavoriteSongsResponse);
     }
 
-    @GetMapping("/test")
-    public HttpStatus getGet() {
-        //예외
-//        try {
-//            favoriteSongsRepository.except();
-//        } catch (RuntimeException e) {
-//            return HttpStatus.OK;
-//        }
-
-        favoriteSongsRepository.except();
-        //예외처리
-        return HttpStatus.OK;
-    }
-
-
-//        List<FavoriteSongs> allFavoriteSongs = favoriteSongsRepository.getAllFavoriteSongs(getFavoriteSongsRequest.memberId);
-//        GetFavoriteSongsResponse getFavoriteSongsResponse = new GetFavoriteSongsResponse(allFavoriteSongs);
-
-//        return ResponseEntity.status(HttpStatus.OK).body(getFavoriteSongsResponse);
     @Transactional
     @DeleteMapping("/favoritesongs/{trackId}/{memberId}")
     public ResponseEntity<?> deleteFromFavoriteSongs(@PathVariable String trackId, @PathVariable String memberId) {

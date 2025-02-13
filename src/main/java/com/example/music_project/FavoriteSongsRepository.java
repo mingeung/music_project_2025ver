@@ -4,6 +4,7 @@ import com.example.music_project.domain.FavoriteSongs;
 import com.example.music_project.domain.Member;
 import com.example.music_project.exception.CustomException;
 import com.example.music_project.exception.ErrorCode;
+import com.example.music_project.service.TrackInfoService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
@@ -14,6 +15,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,19 +25,29 @@ import java.util.List;
 @Repository
 public class FavoriteSongsRepository {
 
+
     public EntityManager em;
+    TrackInfoService trackInfoService;
     @Transactional
-
     public String addToFavoriteSongs(String trackId, Long memberId) {
-        FavoriteSongs favoriteSongs = new FavoriteSongs();
-        favoriteSongs.trackId = trackId;
-        //find(테이블 = 엔티티, pk)
-        Member member = em.find(Member.class,memberId);
-        favoriteSongs.member = member;
 
-        em.persist(favoriteSongs);
+            FavoriteSongs favoriteSongs = new FavoriteSongs();
+            favoriteSongs.trackId = trackId;
+            //find(테이블 = 엔티티, pk)
+            Member member = em.find(Member.class, memberId);
+            //멤버가 존재하지 않을 경우 오류 던지기
+            if (member == null) {
+                throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+            }
+            favoriteSongs.member = member;
 
-        return trackId;
+            //trackId가 유효한지 확인
+            trackInfoService.validTrackId(trackId);
+
+            em.persist(favoriteSongs);
+
+            return trackId;
+
     }
 
     public List<FavoriteSongs> getAllFavoriteSongs(Long memberId) {
@@ -71,7 +83,7 @@ public class FavoriteSongsRepository {
 //        } catch (IllegalArgumentException e) {
 //            return HttpStatus.OK;
 //        }
-        throw new RuntimeException("test");
+        throw new CustomException( ErrorCode.ARTIST_NOT_FOUND);
     }
 
     //이미 있는 노래인지 확인
