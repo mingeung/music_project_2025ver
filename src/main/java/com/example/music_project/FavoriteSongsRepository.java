@@ -5,6 +5,7 @@ import com.example.music_project.domain.Member;
 import com.example.music_project.exception.CustomException;
 import com.example.music_project.exception.ErrorCode;
 import com.example.music_project.service.TrackInfoService;
+import com.example.music_project.service.ValidationService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
@@ -27,22 +28,19 @@ public class FavoriteSongsRepository {
 
 
     public EntityManager em;
-    TrackInfoService trackInfoService;
+    ValidationService validationService;
     @Transactional
     public String addToFavoriteSongs(String trackId, Long memberId) {
 
             FavoriteSongs favoriteSongs = new FavoriteSongs();
-            favoriteSongs.trackId = trackId;
-            //find(테이블 = 엔티티, pk)
-            Member member = em.find(Member.class, memberId);
-            //멤버가 존재하지 않을 경우 오류 던지기
-            if (member == null) {
-                throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-            }
+
+            //memberId가 유효한지 확인
+            Member member = validationService.validMemberId(memberId);
             favoriteSongs.member = member;
 
             //trackId가 유효한지 확인
-            trackInfoService.validTrackId(trackId);
+            validationService.validTrackId(trackId);
+            favoriteSongs.trackId = trackId;
 
             em.persist(favoriteSongs);
 
@@ -51,6 +49,8 @@ public class FavoriteSongsRepository {
     }
 
     public List<FavoriteSongs> getAllFavoriteSongs(Long memberId) {
+        //member가 유효한지 확인 - exception
+        validationService.validMemberId(memberId);
         //jpql
         List<FavoriteSongs> allFavoriteSongs = em.createQuery("select f from FavoriteSongs f where f.member.id = :memberId",FavoriteSongs.class)
                 .setParameter("memberId", memberId)
@@ -61,7 +61,11 @@ public class FavoriteSongsRepository {
 
 
 
-    public String deleteFromFavoriteSongs(String memberId, String trackId) {
+    public String deleteFromFavoriteSongs(Long memberId, String trackId) {
+
+        //memberId와 trackId가 유효한지 확인
+        validationService.validMemberId(memberId);
+        validationService.validTrackId(trackId);
 
         Query query = em.createQuery("DELETE FROM FavoriteSongs f WHERE f.trackId = :trackId AND f.member.id = :memberId")
                  .setParameter("memberId", memberId)
@@ -74,20 +78,16 @@ public class FavoriteSongsRepository {
         }
 
     return "삭제 성공";
-        //        return deletedCount > 0 ? "삭제 성공" : "삭제 실패";
     }
 
-    public HttpStatus except() {
-//        try {
-//            throw new IllegalArgumentException("test");
-//        } catch (IllegalArgumentException e) {
-//            return HttpStatus.OK;
-//        }
-        throw new CustomException( ErrorCode.ARTIST_NOT_FOUND);
-    }
 
     //이미 있는 노래인지 확인
     public boolean isAlreadyFavoriteSong(String trackId, Long memberId) {
+        //memberId와 trackId가 유효한지 확인
+        validationService.validMemberId(memberId);
+        validationService.validTrackId(trackId);
+
+
         String jpql = "SELECT COUNT(f) FROM FavoriteSongs f WHERE f.member.id = :memberId AND f.trackId = :trackId";
 
         TypedQuery<Long> query = em.createQuery(jpql, Long.class);
@@ -97,4 +97,6 @@ public class FavoriteSongsRepository {
         Long count = query.getSingleResult();
         return count > 0;  // 값이 존재하면 true, 없으면 false
     }
+
+
 }

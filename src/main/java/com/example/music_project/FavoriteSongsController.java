@@ -41,7 +41,7 @@ public class FavoriteSongsController {
 
     @Transactional
     @DeleteMapping("/favoritesongs/{trackId}/{memberId}")
-    public ResponseEntity<?> deleteFromFavoriteSongs(@PathVariable String trackId, @PathVariable String memberId) {
+    public ResponseEntity<?> deleteFromFavoriteSongs(@PathVariable String trackId, @PathVariable Long memberId) {
 
         String result = favoriteSongsRepository.deleteFromFavoriteSongs(memberId, trackId);
         return ResponseEntity.status(HttpStatus.OK).body(result);

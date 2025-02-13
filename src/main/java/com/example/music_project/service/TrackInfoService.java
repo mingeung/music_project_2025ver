@@ -19,7 +19,7 @@ public class TrackInfoService {
     private final RestTemplate restTemplate = new RestTemplate(); // RestTemplate 인스턴스 생성
 
     // 공통 API 요청 메서드
-    private String fetchFromSpotify(String endpoint) {
+    public String fetchFromSpotify(String endpoint) {
         String accessToken = spotifyAuthService.accessToken();
 
         HttpHeaders headers = new HttpHeaders();
