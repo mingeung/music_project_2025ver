@@ -55,21 +55,8 @@ public class TrackInfoService {
             throw new CustomException((ErrorCode.TRACK_NOT_FOUND));
         }
     }
-
-    //트랙 정보 확인하기
-    public void validTrackId(String trackId) {
-        try {
-            fetchFromSpotify("tracks/" + trackId);
-        }
-        catch(HttpClientErrorException.BadRequest e) {
-            throw new CustomException((ErrorCode.TRACK_NOT_FOUND));
-        }
-    }
-
     //여러 트랙 한번에 가져오기
     public String getSeveralTrackInfo(String trackIds) {
         return fetchFromSpotify("tracks?ids=" + trackIds);
     }
-
-
 }
