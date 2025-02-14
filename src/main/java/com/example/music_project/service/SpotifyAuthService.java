@@ -20,8 +20,8 @@ import java.util.UUID;
 @AllArgsConstructor
 
 public class  SpotifyAuthService {
-    private static final String CLIENT_ID = "8a0fd00ee8c6474d8f0152da30661e0b";
-    private static final String CLIENT_SECRET = "788ec06786be408bad8b494c42ed4d56";
+    private static final String CLIENT_ID = "2f769a7d229a45eb8337e6be85c7fdce";
+    private static final String CLIENT_SECRET = "a997c15df42a481ca0b0376bd48a6abc";
 
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId(CLIENT_ID).setClientSecret(CLIENT_SECRET).build();
 

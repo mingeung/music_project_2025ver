@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SearchController {
     SearchService searchService;
 
-    @GetMapping("/searchResult/trackName={trackName}") //url 이렇게 쓰는 거 맞나?
+    @GetMapping("/searchResult/trackName={trackName}")
     public ResponseEntity<?> getSearchResult(@PathVariable String trackName) {
         return ResponseEntity.status(HttpStatus.OK).body(searchService.getSearchResult(trackName));
     }

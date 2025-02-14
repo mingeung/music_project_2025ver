@@ -32,6 +32,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'se.michaelthelin.spotify:spotify-web-api-java:9.1.1' //spotify api
+    implementation 'org.springframework.boot:spring-boot-starter-security'  //spring security
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 }
 
