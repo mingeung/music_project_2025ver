@@ -19,6 +19,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        getRedirectStrategy().sendRedirect(request, response,"http://localhost:3000");
+        log.info("OAuth 성공적");
+        getRedirectStrategy().sendRedirect(request, response,"http://localhost:3000/home");
     }
 }

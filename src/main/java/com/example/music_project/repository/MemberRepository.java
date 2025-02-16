@@ -13,6 +13,7 @@ public class MemberRepository {
 
     @Transactional
     public String save(Member member) {
+
         em.persist(member);
 
         return member.id;
