@@ -25,11 +25,10 @@ public class PlayingRepository {
     public EntityManager em; //entity(테이블)을 관리
 
     @Transactional //오류가 나면 처음부터 다시
-    public String addToPlaying(String trackId, Long memberId, LocalDateTime date, String artistName, String trackName) {
+    public String addToPlaying(String trackId, String memberId, LocalDateTime date, String artistName, String trackName) {
         //유효한 값인지 확인
         validationService.validTrackId(trackId);
         validationService.validMemberId(memberId);
-
 
         Playing playing = new Playing(); //테이블 클래스 인스턴스 만들기
         playing.trackId = trackId;
@@ -48,7 +47,7 @@ public class PlayingRepository {
         return trackId;
     }
 
-    public List<Playing> getAllPlaying(Long memberId) {
+    public List<Playing> getAllPlaying(String memberId) {
         validationService.validMemberId(memberId);
 
         List<Playing> allPlaying = em.createQuery("select f from Playing f where f.member.id = :memberId", Playing.class)
@@ -58,7 +57,7 @@ public class PlayingRepository {
         return allPlaying;
     }
     //이번달 가장 많이 들은 곡
-    public List<MostPlayedTrack> getMonthPlayedTrack(Long memberId) {
+    public List<MostPlayedTrack> getMonthPlayedTrack(String memberId) {
 
         validationService.validMemberId(memberId);
 
@@ -82,7 +81,7 @@ public class PlayingRepository {
     }
 
     //이번달 가장 많이 들은 아티스트
-    public List<MostPlayedArtist> getMonthPlayedArtist(Long memberId) {
+    public List<MostPlayedArtist> getMonthPlayedArtist(String memberId) {
         validationService.validMemberId(memberId);
 
         int currentMonth = LocalDate.now().getMonthValue();

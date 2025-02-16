@@ -47,7 +47,9 @@ public class FavoriteSongsController {
 
     @Transactional
     @DeleteMapping("/favoritesongs/{trackId}/{memberId}")
-    public ResponseEntity<?> deleteFromFavoriteSongs(@PathVariable String trackId, @PathVariable Long memberId) {
+    public ResponseEntity<?> deleteFromFavoriteSongs(@PathVariable String trackId, @AuthenticationPrincipal OAuth2User oAuth2User) {
+        Map<String, Object> map = oAuth2User.getAttributes();
+        String memberId = map.get("id").toString();
 
         String result = favoriteSongsRepository.deleteFromFavoriteSongs(memberId, trackId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -55,7 +57,10 @@ public class FavoriteSongsController {
 
     //이미 보관함에 있는 노래인지 확인
     @GetMapping("/favoritesongs/{trackId}/{memberId}")
-    public ResponseEntity<?> isAlreadyFavoriteSong(@PathVariable String trackId, @PathVariable Long memberId) {
+    public ResponseEntity<?> isAlreadyFavoriteSong(@PathVariable String trackId, @AuthenticationPrincipal OAuth2User oAuth2User) {
+        Map<String, Object> map = oAuth2User.getAttributes();
+        String memberId = map.get("id").toString();
+
         boolean result = favoriteSongsRepository.isAlreadyFavoriteSong(trackId, memberId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

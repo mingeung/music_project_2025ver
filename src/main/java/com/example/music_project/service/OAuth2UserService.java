@@ -27,7 +27,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         log.info("oAuth2UserRequest: ",oAuth2UserRequest);
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
 
-
         Map<String, Object> map = oAuth2User.getAttributes();
 
         //이미 가입된 회원인지 검증

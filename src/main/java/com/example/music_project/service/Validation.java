@@ -28,7 +28,7 @@ public class Validation {
 
     // 멤버아이디가 유효한지 확인하는 예외
     @Transactional
-    public Member validMemberId(Long memberId) {
+    public Member validMemberId(String memberId) {
         Member member = em.find(Member.class, memberId);
         if (member == null) {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);  // member가 없으면 예외를 던짐

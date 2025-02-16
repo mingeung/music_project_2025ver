@@ -15,8 +15,6 @@ import se.michaelthelin.spotify.requests.authorization.client_credentials.Client
 import java.io.IOException;
 import java.util.UUID;
 
-
-
 @Service
 @AllArgsConstructor
 

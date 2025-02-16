@@ -38,6 +38,7 @@ public class SecurityConfig {
 //                .requestMatchers("/api").permitAll()
                 .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated());
+
         //중요 -> 소셜로그인 버튼을 누르면 여기서부터 로직이 시작됨
         //oauth2Login을 실행하면 => code를 받아서 accessToken을 받아오는 것까지를 자동으로 실행하고 userInfoEndpoint() 안에 들어갈 oAuth2UserService가 자동실행.
         //그 중에서도 loadUser가 자동으로 실행

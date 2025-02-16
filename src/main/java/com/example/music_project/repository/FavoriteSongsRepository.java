@@ -56,7 +56,7 @@ public class FavoriteSongsRepository {
 
 
 
-    public String deleteFromFavoriteSongs(Long memberId, String trackId) {
+    public String deleteFromFavoriteSongs(String memberId, String trackId) {
 
         //memberId와 trackId가 유효한지 확인
         validationService.validMemberId(memberId);
@@ -77,7 +77,7 @@ public class FavoriteSongsRepository {
 
 
     //이미 있는 노래인지 확인
-    public boolean isAlreadyFavoriteSong(String trackId, Long memberId) {
+    public boolean isAlreadyFavoriteSong(String trackId, String memberId) {
         //memberId와 trackId가 유효한지 확인
         validationService.validMemberId(memberId);
         validationService.validTrackId(trackId);
