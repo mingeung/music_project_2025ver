@@ -1,41 +1,36 @@
-package com.example.music_project;
+package com.example.music_project.repository;
 
 import com.example.music_project.domain.FavoriteSongs;
 import com.example.music_project.domain.Member;
 import com.example.music_project.exception.CustomException;
 import com.example.music_project.exception.ErrorCode;
-import com.example.music_project.service.TrackInfoService;
-import com.example.music_project.service.ValidationService;
+import com.example.music_project.service.Validation;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.HttpClientErrorException;
 
-import java.time.LocalDate;
 import java.util.List;
 
 
 @AllArgsConstructor
 @Repository
 public class FavoriteSongsRepository {
+    MemberRepository memberRepository;
 
 
     public EntityManager em;
-    ValidationService validationService;
+    Validation validationService;
     @Transactional
-    public String addToFavoriteSongs(String trackId, Long memberId) {
+    public String addToFavoriteSongs(String trackId, String memberId) {
 
             FavoriteSongs favoriteSongs = new FavoriteSongs();
 
             //memberId가 유효한지 확인
-            Member member = validationService.validMemberId(memberId);
+//            Member member = validationService.validMemberId(memberId);
+            Member member = memberRepository.findById(memberId);
             favoriteSongs.member = member;
 
             //trackId가 유효한지 확인
@@ -48,9 +43,9 @@ public class FavoriteSongsRepository {
 
     }
 
-    public List<FavoriteSongs> getAllFavoriteSongs(Long memberId) {
+    public List<FavoriteSongs> getAllFavoriteSongs(String memberId) {
         //member가 유효한지 확인 - exception
-        validationService.validMemberId(memberId);
+//        validationService.validMemberId(memberId);
         //jpql
         List<FavoriteSongs> allFavoriteSongs = em.createQuery("select f from FavoriteSongs f where f.member.id = :memberId",FavoriteSongs.class)
                 .setParameter("memberId", memberId)

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -16,25 +17,27 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 @Log4j2
-
 public class SearchService {
     SpotifyAuthService spotifyAuthService;
 
     public List<JsonNode> getSearchResult(String trackName) {
-
+        log.info("오류탐색1");
         String accessToken = spotifyAuthService.accessToken();
-
+        log.info("오류탐색2");
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Host", "api.spotify.com");
         headers.add("Content-Type", "application/json");
+        headers.add("Accept-Language", "ko-KR");
+        log.info("오류탐색3");
+
         String body = "";
 
         //추가한 부분
 //        String encodedTrackName = URLEncoder.encode(trackName, StandardCharsets.UTF_8);
-        String url = "https://api.spotify.com/v1/search?q=" + trackName + "&type=track";
-
+        String url = "https://api.spotify.com/v1/search?q=" + trackName + "&type=track" + "&market=KR";
+        log.info("오류탐색4");
 
         HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
 
@@ -44,6 +47,9 @@ public class SearchService {
 
 
         String response = responseEntity.getBody();
+        //추가
+
+
         List<JsonNode> tracks = getTrackItems(response);
 
         return tracks;

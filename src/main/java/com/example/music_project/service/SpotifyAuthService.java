@@ -1,5 +1,6 @@
 package com.example.music_project.service;
 
+import com.example.music_project.properties.SpotifyProperties;
 import lombok.AllArgsConstructor;
 import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.net.URIBuilder;
@@ -20,12 +21,12 @@ import java.util.UUID;
 @AllArgsConstructor
 
 public class  SpotifyAuthService {
-    private static final String CLIENT_ID = "2f769a7d229a45eb8337e6be85c7fdce";
-    private static final String CLIENT_SECRET = "a997c15df42a481ca0b0376bd48a6abc";
-
-    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId(CLIENT_ID).setClientSecret(CLIENT_SECRET).build();
+    private final SpotifyProperties spotifyProperties;
 
     public String accessToken() {
+        String CLIENT_ID = spotifyProperties.getClientId();
+        String CLIENT_SECRET = spotifyProperties.getClientSecret();
+        SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId(CLIENT_ID).setClientSecret(CLIENT_SECRET).build();
         ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials().build();
         try {
             final ClientCredentials clientCredential = clientCredentialsRequest.execute();

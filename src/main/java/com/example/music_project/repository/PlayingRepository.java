@@ -1,35 +1,30 @@
-package com.example.music_project;
+package com.example.music_project.repository;
 
 
 import com.example.music_project.domain.Member;
 import com.example.music_project.domain.Playing;
 import com.example.music_project.dto.MostPlayedArtist;
 import com.example.music_project.dto.MostPlayedTrack;
-import com.example.music_project.service.ValidationService;
+import com.example.music_project.service.Validation;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.TemporalAdjusters;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @Repository // 이 파일이 리포지토리라는 것을 표시해줌
 @AllArgsConstructor //생성자가 모두 있는 것과 같은 효과
 @Log4j2
 public class PlayingRepository {
 
-    ValidationService validationService;
+    Validation validationService;
     public EntityManager em; //entity(테이블)을 관리
-    @Transactional //오류가 나면 처음부터 다시
 
+    @Transactional //오류가 나면 처음부터 다시
     public String addToPlaying(String trackId, Long memberId, LocalDateTime date, String artistName, String trackName) {
         //유효한 값인지 확인
         validationService.validTrackId(trackId);

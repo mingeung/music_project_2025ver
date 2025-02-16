@@ -6,13 +6,13 @@ import com.example.music_project.exception.ErrorCode;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
-@Service
+@Component
 @AllArgsConstructor
-
-public class ValidationService {
+public class Validation {
     TrackInfoService trackInfoService;
     public EntityManager em;
 

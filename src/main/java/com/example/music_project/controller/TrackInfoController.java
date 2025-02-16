@@ -1,7 +1,5 @@
-package com.example.music_project;
+package com.example.music_project.controller;
 
-import com.example.music_project.dto.GetArtistInfoRequest;
-import com.example.music_project.dto.GetTrackInfoRequest;
 import com.example.music_project.service.TrackInfoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 
 public class TrackInfoController {
     TrackInfoService trackInfoService;

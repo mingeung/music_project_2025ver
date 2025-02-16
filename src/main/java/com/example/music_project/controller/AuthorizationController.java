@@ -1,12 +1,8 @@
-package com.example.music_project;
+package com.example.music_project.controller;
 
-import com.example.music_project.service.SpotifyAuthService;
+import com.example.music_project.properties.SpotifyProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,21 +15,20 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Base64;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 @Log4j2
 public class AuthorizationController {
+    private final SpotifyProperties spotifyProperties;
+
     // 상태값을 랜덤으로 생성
     private final String state = UUID.randomUUID().toString().substring(0, 16);
     private final String scope = "user-read-private user-read-email";
-    private final String CLIENT_ID = "2f769a7d229a45eb8337e6be85c7fdce";
-    private final String REDIRECT_URI = "http://localhost:3000/callback";
-    private final String CLIENT_SECRET = "a997c15df42a481ca0b0376bd48a6abc";
+    private final String CLIENT_ID = spotifyProperties.getClientId();
+    private final String REDIRECT_URI = spotifyProperties.getRedirectUri();
+    private final String CLIENT_SECRET = spotifyProperties.getClientSecret();
 
     @GetMapping("/spotifyLogin")
     public  String login() {
