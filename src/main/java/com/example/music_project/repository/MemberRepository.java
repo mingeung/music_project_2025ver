@@ -60,13 +60,9 @@ public class MemberRepository {
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
-
             // 고유 파일명 생성
             String originalFilename = file.getOriginalFilename();
             String newFilename = System.currentTimeMillis() + "_" + originalFilename;
-
-            log.info("업로드된 파일: " + file.getOriginalFilename());
-            log.info("newFilename: " + newFilename);
 
             // 최종 파일 경로 설정
             Path filePath = uploadPath.resolve(newFilename);
@@ -77,13 +73,10 @@ public class MemberRepository {
             // 저장된 파일 URL
             String fileUrl = "/uploads/" + newFilename;
 
-            log.info("저장된 파일 url:"+ fileUrl);
-
             em.createQuery("UPDATE Member m SET m.imageUrl = :fileUrl WHERE m.id = :memberId")
                     .setParameter("fileUrl", fileUrl)
                     .setParameter("memberId", memberId)
                     .executeUpdate();
-
 
             return fileUrl;
         }catch (IOException e) {
