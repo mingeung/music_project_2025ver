@@ -20,7 +20,6 @@ import java.util.List;
 public class FavoriteSongsRepository {
     MemberRepository memberRepository;
 
-
     public EntityManager em;
     Validation validationService;
     @Transactional
@@ -40,7 +39,6 @@ public class FavoriteSongsRepository {
             em.persist(favoriteSongs);
 
             return trackId;
-
     }
 
     public List<FavoriteSongs> getAllFavoriteSongs(String memberId) {

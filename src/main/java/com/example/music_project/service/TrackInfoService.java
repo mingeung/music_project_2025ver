@@ -49,7 +49,8 @@ public class TrackInfoService {
     // 트랙 정보 가져오기
     public String getTrackInfo(String trackId) {
         try {
-            return fetchFromSpotify("tracks/" + trackId);
+//            return fetchFromSpotify("tracks/" + trackId);
+            return fetchFromSpotify("tracks?ids=" + trackId);
         }
         catch(HttpClientErrorException.BadRequest e) {
             throw new CustomException((ErrorCode.TRACK_NOT_FOUND));
