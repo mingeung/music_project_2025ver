@@ -46,7 +46,7 @@ public class FavoriteSongsController {
     }
 
     @Transactional
-    @DeleteMapping("/favoritesongs/{trackId}/{memberId}")
+    @DeleteMapping("/favoritesongs/{trackId}")
     public ResponseEntity<?> deleteFromFavoriteSongs(@PathVariable String trackId, @AuthenticationPrincipal OAuth2User oAuth2User) {
         Map<String, Object> map = oAuth2User.getAttributes();
         String memberId = map.get("id").toString();
