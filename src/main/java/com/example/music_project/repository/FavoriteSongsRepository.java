@@ -80,7 +80,6 @@ public class FavoriteSongsRepository {
         validationService.validMemberId(memberId);
         validationService.validTrackId(trackId);
 
-
         String jpql = "SELECT COUNT(f) FROM FavoriteSongs f WHERE f.member.id = :memberId AND f.trackId = :trackId";
 
         TypedQuery<Long> query = em.createQuery(jpql, Long.class);

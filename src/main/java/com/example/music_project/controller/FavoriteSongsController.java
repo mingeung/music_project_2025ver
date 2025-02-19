@@ -56,7 +56,7 @@ public class FavoriteSongsController {
     }
 
     //이미 보관함에 있는 노래인지 확인
-    @GetMapping("/favoritesongs/{trackId}/{memberId}")
+    @GetMapping("/favoritesongs/{trackId}")
     public ResponseEntity<?> isAlreadyFavoriteSong(@PathVariable String trackId, @AuthenticationPrincipal OAuth2User oAuth2User) {
         Map<String, Object> map = oAuth2User.getAttributes();
         String memberId = map.get("id").toString();
