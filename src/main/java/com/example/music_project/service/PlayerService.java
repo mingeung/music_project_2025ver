@@ -182,7 +182,9 @@ public class PlayerService {
     }
 
     //음원 정지
-    public String playPause(String deviceId,String accessToken) {
+    public String playPause(String deviceId) {
+
+        String accessToken = accessTokenStore.getAccessToken();
 
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();

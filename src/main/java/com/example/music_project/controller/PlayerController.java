@@ -40,19 +40,12 @@ public class PlayerController {
         String playstart = playerService.playStart(deviceId, uris);
         return ResponseEntity.status(HttpStatus.OK).body(playstart);
     }
-//
-//    @PutMapping("playStart/{deviceId}/{accessToken}")
-//    public ResponseEntity<?> startPlaying(@PathVariable String deviceId,@PathVariable String accessToken, @RequestBody PutPlayStart putPlayStart) {
-//        String uris = putPlayStart.uris;
-//        String playstart = playerService.playStart(deviceId, uris, accessToken);
-//        return ResponseEntity.status(HttpStatus.OK).body(playstart);
-//    }
 
 
     //play 멈추기
-    @PutMapping("playPause/{deviceId}/{accessToken}")
-    public ResponseEntity<?> pausePlaying(@PathVariable String deviceId, @PathVariable String accessToken) {
-        String playpause = playerService.playPause(deviceId, accessToken);
+    @PutMapping("playPause/{deviceId}")
+    public ResponseEntity<?> pausePlaying(@PathVariable String deviceId) {
+        String playpause = playerService.playPause(deviceId);
         return ResponseEntity.status(HttpStatus.OK).body(playpause);
     }
 }
