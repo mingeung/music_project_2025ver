@@ -94,4 +94,5 @@ public class MemberRepository {
 
         return nickname;
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.music_project.service;
 
+import com.example.music_project.properties.AccessTokenStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -19,25 +20,23 @@ import java.util.List;
 @Log4j2
 public class SearchService {
     SpotifyAuthService spotifyAuthService;
+    AccessTokenStore accessTokenStore;
 
     public List<JsonNode> getSearchResult(String trackName) {
-        log.info("오류탐색1");
-        String accessToken = spotifyAuthService.accessToken();
-        log.info("오류탐색2");
+//        String accessToken = spotifyAuthService.accessToken();
+        String accessToken = accessTokenStore.getAccessToken();
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Host", "api.spotify.com");
         headers.add("Content-Type", "application/json");
         headers.add("Accept-Language", "ko-KR");
-        log.info("오류탐색3");
 
         String body = "";
 
         //추가한 부분
 //        String encodedTrackName = URLEncoder.encode(trackName, StandardCharsets.UTF_8);
         String url = "https://api.spotify.com/v1/search?q=" + trackName + "&type=track" + "&market=KR";
-        log.info("오류탐색4");
 
         HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
 

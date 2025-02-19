@@ -3,6 +3,7 @@ package com.example.music_project.controller;
 import com.example.music_project.domain.Member;
 import com.example.music_project.dto.GetMemberInfoResponse;
 import com.example.music_project.repository.MemberRepository;
+import com.example.music_project.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +25,7 @@ import java.util.Map;
 @Log4j2
 public class MemberController {
 
+    private final MemberService memberService;
     MemberRepository memberRepository;
 
     @GetMapping("/member")
@@ -36,6 +38,7 @@ public class MemberController {
 
         return ResponseEntity.status(HttpStatus.OK).body(getMemberInfoResponse);
     }
+
 
     @PatchMapping("/image")
     public String updateMemberImage(
@@ -60,6 +63,12 @@ public class MemberController {
         String memberNickname = memberRepository.nicknameUpdate(memberId, nickname);
 
         return ResponseEntity.status(HttpStatus.OK).body(memberNickname);
+    }
+
+    @GetMapping("/myInfo")
+    public ResponseEntity<String> getMyInfo(){
+        String memberInfo = memberService.getMyInfo();
+        return ResponseEntity.status(HttpStatus.OK).body(memberInfo);
     }
 }
 

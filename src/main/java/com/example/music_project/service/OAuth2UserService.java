@@ -24,23 +24,20 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException{
-        log.info("oAuth2UserRequest: ",oAuth2UserRequest);
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
 
         Map<String, Object> map = oAuth2User.getAttributes();
 
         //이미 가입된 회원인지 검증
         String memberId =  map.get("id").toString();
-        log.info("memberId: ",memberId);
         Member alreadyMember = memberRepository.findById(memberId);
 
-        //display_name, email, id, images,
         //가입되지 않은 경우에만 회원가입
         if (alreadyMember == null) {
-            log.info("회원가입진행");
             Member member = new Member();
+            log.info(map);
             member.id = map.get("id").toString(); //get은 key에 해당하는 value를 가져와줌
-            member.email = map.get("email").toString();
+//            member.email = map.get("email").toString();
             member.nickname = map.get("display_name").toString();
             if (map.get("images") != null) {
                 member.imageUrl = (String)(((Map<String, Object>) ((ArrayList<?>) map.get("images")).get(0)).get("url"));

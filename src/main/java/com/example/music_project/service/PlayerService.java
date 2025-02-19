@@ -1,6 +1,8 @@
 package com.example.music_project.service;
 
 
+import com.example.music_project.OAuth2AuthenticationSuccessHandler;
+import com.example.music_project.properties.AccessTokenStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -22,9 +24,11 @@ import java.util.Map;
 
 public class PlayerService {
     SpotifyAuthService spotifyAuthService;
+    AccessTokenStore accessTokenStore;
     public String getPlaybackState(){
-
+//        String accessToken =accessTokenStore.getAccessToken();
         String accessToken = spotifyAuthService.accessToken();
+
 
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -144,11 +148,12 @@ public class PlayerService {
     }
 
     //음원 재생하기
-    public String playStart(String deviceId,String accessToken, String uris) {
+    public String playStart(String deviceId,String uris) {
 
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-//        String token = spotifyAuthService.accessToken();
+        String accessToken = accessTokenStore.getAccessToken();
+//        String accessToken = spotifyAuthService.accessToken();
         // 1. JSON 객체 생성
         JSONObject requestBody = new JSONObject();
         requestBody.put("uris", uris.split(","));  // uris가 쉼표로 구분된 문자열로 전달된다고 가정
@@ -161,10 +166,6 @@ public class PlayerService {
         String url = "https://api.spotify.com/v1/me/player/play?device_id=" + deviceId;
 
         String body = "{\"uris\": [" + uris + "]}";
-
-        System.out.println("Access Token: " + accessToken);
-        System.out.println("Request URL: " + url);
-        System.out.println("Request Body: " + body);
 
         // 3. HttpEntity 객체에 헤더와 본문 설정
         HttpEntity<String> entity = new HttpEntity<>(requestBody.toString(), headers);

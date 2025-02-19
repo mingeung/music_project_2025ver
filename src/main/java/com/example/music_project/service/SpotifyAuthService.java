@@ -38,6 +38,8 @@ public class  SpotifyAuthService {
          }
     }
 
+
+
 //    public ResponseEntity<String> userAuth() {
 //        String REDIRECT_URI = "http://localhost:3000/callback";
 //        String state = UUID.randomUUID().toString().substring(0, 16);
