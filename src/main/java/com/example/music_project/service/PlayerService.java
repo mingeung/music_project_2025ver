@@ -141,7 +141,6 @@ public class PlayerService {
                 url, HttpMethod.GET, requestEntity, String.class
         );
 
-
         String response = responseEntity.getBody();
 
         return response;

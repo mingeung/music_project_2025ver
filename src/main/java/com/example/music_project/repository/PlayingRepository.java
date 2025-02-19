@@ -25,7 +25,7 @@ public class PlayingRepository {
     public EntityManager em; //entity(테이블)을 관리
 
     @Transactional //오류가 나면 처음부터 다시
-    public String addToPlaying(String trackId, String memberId, LocalDateTime date, String artistName, String trackName) {
+    public String addToPlaying(String trackId, LocalDateTime date, String artistName, String trackName, String memberId) {
         //유효한 값인지 확인
         validationService.validTrackId(trackId);
         validationService.validMemberId(memberId);

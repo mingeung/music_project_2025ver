@@ -1,6 +1,5 @@
 package com.example.music_project.controller;
 
-
 import com.example.music_project.dto.PutPlayStart;
 import com.example.music_project.service.PlayerService;
 import lombok.AllArgsConstructor;
@@ -32,7 +31,6 @@ public class PlayerController {
         return ResponseEntity.status(HttpStatus.OK).body(info);
     }
 
-
     //play 시작하기
     @PutMapping("playStart/{deviceId}")
     public ResponseEntity<?> startPlaying(@PathVariable String deviceId, @RequestBody PutPlayStart putPlayStart) {
@@ -40,7 +38,6 @@ public class PlayerController {
         String playstart = playerService.playStart(deviceId, uris);
         return ResponseEntity.status(HttpStatus.OK).body(playstart);
     }
-
 
     //play 멈추기
     @PutMapping("playPause/{deviceId}")

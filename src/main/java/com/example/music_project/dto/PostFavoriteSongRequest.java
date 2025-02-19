@@ -3,12 +3,10 @@ package com.example.music_project.dto;
 public class PostFavoriteSongRequest {
 
     public String trackId;
-    public Long memberId;
 ;
 
-    public PostFavoriteSongRequest(String trackId, Long memberId) {
+    public PostFavoriteSongRequest(String trackId) {
         this.trackId = trackId;
-        this.memberId = memberId;
 
 
 
