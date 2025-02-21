@@ -30,7 +30,6 @@ public class PlayerController {
         String info = playerService.getAllInfo(href);
         return ResponseEntity.status(HttpStatus.OK).body(info);
     }
-
     //play 시작하기
     @PutMapping("playStart/{deviceId}")
     public ResponseEntity<?> startPlaying(@PathVariable String deviceId, @RequestBody PutPlayStart putPlayStart) {
@@ -38,11 +37,39 @@ public class PlayerController {
         String playstart = playerService.playStart(deviceId, uris);
         return ResponseEntity.status(HttpStatus.OK).body(playstart);
     }
-
     //play 멈추기
     @PutMapping("playPause/{deviceId}")
     public ResponseEntity<?> pausePlaying(@PathVariable String deviceId) {
         String playpause = playerService.playPause(deviceId);
         return ResponseEntity.status(HttpStatus.OK).body(playpause);
     }
+    //반복 실행
+    @PutMapping("repeatMode/{deviceId}/{state}")
+    public ResponseEntity<?> repeatPlaying(@PathVariable String deviceId, @PathVariable String state) {
+        String repeatMode = playerService.repeatMode(deviceId, state);
+        return ResponseEntity.status(HttpStatus.OK).body(repeatMode);
+    }
+
+    //셔 실행
+    @PutMapping("/shuffle/{deviceId}/{state}")
+    public ResponseEntity<?> shufflePlaying(@PathVariable String deviceId, @PathVariable String state) {
+        String shuffleMode = playerService.shuffleMode(deviceId, state);
+        return ResponseEntity.status(HttpStatus.OK).body(shuffleMode);
+    }
+
+    //이전 곡으로 이동
+    @PostMapping("/skipToPrevious/{deviceId}")
+    public ResponseEntity<?> skipToPrevious(@PathVariable String deviceId) {
+        String skipToPrevious = playerService.skipToPrevious(deviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(skipToPrevious);
+    }
+
+    //다음 곡으로 이동
+    @PostMapping("/skipToNext/{deviceId}")
+    public ResponseEntity<?> skipToNext(@PathVariable String deviceId) {
+        String skipToNext = playerService.skipToNext(deviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(skipToNext);
+    }
 }
+
+
