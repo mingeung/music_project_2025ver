@@ -50,7 +50,7 @@ public class PlayerController {
         return ResponseEntity.status(HttpStatus.OK).body(repeatMode);
     }
 
-    //셔 실행
+    //셔플 실행
     @PutMapping("/shuffle/{deviceId}/{state}")
     public ResponseEntity<?> shufflePlaying(@PathVariable String deviceId, @PathVariable String state) {
         String shuffleMode = playerService.shuffleMode(deviceId, state);
@@ -70,6 +70,11 @@ public class PlayerController {
         String skipToNext = playerService.skipToNext(deviceId);
         return ResponseEntity.status(HttpStatus.OK).body(skipToNext);
     }
+    //사용자 큐 가져오기
+//    @GetMapping("userQueue")
+//    public ResponseEntity<?> getUserQueue() {
+//        String userQueue = playerService
+//    }
 }
 
 

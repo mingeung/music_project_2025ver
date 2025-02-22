@@ -26,38 +26,21 @@ import java.util.Map;
 public class PlayerService {
     AccessTokenStore accessTokenStore;
 
-    private String sendRequest(String url, HttpMethod method, String body) {
-        String accessToken = accessTokenStore.getAccessToken();
-        RestTemplate rest = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
-        headers.add("Host", "api.spotify.com");
-        headers.add("Content-Type", "application/json");
+    private String albumEncoding(String response) {
+        String albumHref = "Unknown Device";
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response);
+            JsonNode deviceIdNode = rootNode.path("tracks").path("href");
 
-        HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<String> responseEntity = rest.exchange(url, method, requestEntity, String.class);
-        return responseEntity.getBody();
+            if (deviceIdNode != null && !deviceIdNode.isNull()) {
+                albumHref = deviceIdNode.asText();
+            }
+        } catch (Exception e) {
+            log.error("Error parsing JSON response: ", e);
+        }
+        return albumHref;
     }
-
-
-    public String skipToPrevious(String deviceId) {
-        String url = "https://api.spotify.com/v1/me/player/previous?device_id=" + deviceId;
-        String response = sendRequest(url, HttpMethod.POST, "");  // POST 요청을 보냄
-        return response;
-    }
-    public String skipToNext(String deviceId) {
-        String url = "https://api.spotify.com/v1/me/player/next?device_id=" + deviceId;
-        String response = sendRequest(url, HttpMethod.POST, "");  // POST 요청을 보냄
-        return response;
-    }
-
-
-    public String getPlaybackState() {
-        String url = "https://api.spotify.com/v1/me/player";
-        String response = sendRequest(url, HttpMethod.GET, "");
-        return playerEncoding(response);
-    }
-
     private String playerEncoding(String response) {
         String deviceId = "Unknown Device";
         try {
@@ -74,31 +57,6 @@ public class PlayerService {
         return deviceId;
     }
 
-    public String getAlbum(String albumId) {
-        String url = "https://api.spotify.com/v1/albums/" + albumId;
-        String response = sendRequest(url, HttpMethod.GET, "");
-        return albumEncoding(response);
-    }
-
-    private String albumEncoding(String response) {
-        String albumHref = "Unknown Device";
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(response);
-            JsonNode deviceIdNode = rootNode.path("tracks").path("href");
-
-            if (deviceIdNode != null && !deviceIdNode.isNull()) {
-                albumHref = deviceIdNode.asText();
-            }
-        } catch (Exception e) {
-            log.error("Error parsing JSON response: ", e);
-        }
-        return albumHref;
-    }
-
-    public String getAllInfo(String href) {
-        return sendRequest(href, HttpMethod.GET, "");
-    }
 
     private HttpHeaders createHeaders() {
         HttpHeaders headers = new HttpHeaders();
@@ -109,17 +67,63 @@ public class PlayerService {
         return headers;
     }
 
-    private String sendPutRequest(String url, HttpEntity<String> entity) {
+    private String sendRequest(String url,  HttpMethod method, HttpEntity<String> entity) {
         RestTemplate restTemplate = new RestTemplate();
         try {
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(url, method, entity, String.class);
             log.info(response.getBody());
             return response.getBody();
         } catch (HttpClientErrorException e) {
-            log.error("Error with PUT request: ", e);
+            log.error("Error with " + method + " request: ", e);
             return "Error: " + e.getMessage();
         }
     }
+
+    public String skipToPrevious(String deviceId) {
+        String url = "https://api.spotify.com/v1/me/player/previous?device_id=" + deviceId;
+        HttpEntity<String> entity = new HttpEntity<>(createHeaders());
+        String response = sendRequest(url, HttpMethod.POST, entity);  // POST 요청을 보냄
+        return response;
+    }
+    public String skipToNext(String deviceId) {
+        String url = "https://api.spotify.com/v1/me/player/next?device_id=" + deviceId;
+        HttpEntity<String> entity = new HttpEntity<>(createHeaders());
+        String response = sendRequest(url, HttpMethod.POST, entity);  // POST 요청을 보냄
+        return response;
+    }
+
+    public String getPlaybackState() {
+        String url = "https://api.spotify.com/v1/me/player";
+        HttpEntity<String> entity = new HttpEntity<>(createHeaders());
+        String response = sendRequest(url, HttpMethod.GET, entity);
+        return playerEncoding(response);
+    }
+
+    public String getAlbum(String albumId) {
+        String url = "https://api.spotify.com/v1/albums/" + albumId;
+        HttpEntity<String> entity = new HttpEntity<>(createHeaders());
+        String response = sendRequest(url, HttpMethod.GET, entity);
+        return albumEncoding(response);
+    }
+
+
+    public String getAllInfo(String href) {
+        HttpEntity<String> entity = new HttpEntity<>(createHeaders());
+        return sendRequest(href, HttpMethod.GET, entity);
+    }
+
+//    public String getUserQueue() {
+//        String url = "https://api.spotify.com/v1/me/player/queue";
+//        String response = sendRequest(url, HttpMethod.GET, "");
+//        return response;
+//    }
+
+    public String playPause(String deviceId) {
+        String url = "https://api.spotify.com/v1/me/player/pause?device_id=" + deviceId;
+        HttpEntity<String> entity = new HttpEntity<>(createHeaders());
+        return sendRequest(url, HttpMethod.PUT, entity);
+    }
+
 
     public String playStart(String deviceId, String uris) {
         String url = "https://api.spotify.com/v1/me/player/play?device_id=" + deviceId;
@@ -127,25 +131,20 @@ public class PlayerService {
         requestBody.put("uris", uris.split(","));
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody.toString(), createHeaders());
-        return sendPutRequest(url, entity);
+        return sendRequest(url,HttpMethod.PUT,  entity);
     }
 
-    public String playPause(String deviceId) {
-        String url = "https://api.spotify.com/v1/me/player/pause?device_id=" + deviceId;
-        HttpEntity<String> entity = new HttpEntity<>(createHeaders());
-        return sendPutRequest(url, entity);
-    }
 
     public String repeatMode(String deviceId, String state) {
         String url = "https://api.spotify.com/v1/me/player/repeat?state=" + state + "&device_id=" + deviceId;
         HttpEntity<String> entity = new HttpEntity<>(createHeaders());
-        return sendPutRequest(url, entity);
+        return sendRequest(url, HttpMethod.PUT, entity);
     }
 
     public String shuffleMode(String deviceId, String state) {
         String url = "https://api.spotify.com/v1/me/player/shuffle?state=" + state + "&device_id=" + deviceId;
         HttpEntity<String> entity = new HttpEntity<>(createHeaders());
-        return sendPutRequest(url, entity);
+        return sendRequest(url, HttpMethod.PUT, entity);
     }
 
 }
