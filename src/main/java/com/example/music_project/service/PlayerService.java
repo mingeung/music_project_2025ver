@@ -32,6 +32,7 @@ public class PlayerService {
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Host", "api.spotify.com");
         headers.add("Content-Type", "application/json");
+        headers.add("Accept-Language", "ko-KR");
         return headers;
     }
 
@@ -61,10 +62,9 @@ public class PlayerService {
     }
 
     public String getPlaybackState() {
-        String url = "https://api.spotify.com/v1/me/player";
+        String url = "https://api.spotify.com/v1/me/player?market=KR";
         HttpEntity<String> entity = new HttpEntity<>(createHeaders());
-        String response = sendRequest(url, HttpMethod.GET, entity);
-        return playerEncoding(response);
+        return sendRequest(url, HttpMethod.GET, entity);
     }
 
     public String getAlbum(String albumId) {
@@ -136,21 +136,6 @@ public class PlayerService {
             log.error("Error parsing JSON response: ", e);
         }
         return albumHref;
-    }
-    private String playerEncoding(String response) {
-        String deviceId = "Unknown Device";
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(response);
-            JsonNode deviceIdNode = rootNode.path("device").path("id");
-
-            if (deviceIdNode != null && !deviceIdNode.isNull()) {
-                deviceId = deviceIdNode.asText();
-            }
-        } catch (Exception e) {
-            log.error("Error parsing JSON response: ", e);
-        }
-        return deviceId;
     }
 
 }

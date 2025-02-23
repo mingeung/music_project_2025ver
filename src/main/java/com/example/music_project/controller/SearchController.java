@@ -19,8 +19,6 @@ public class SearchController {
 
     @GetMapping("/searchResult/trackName={trackName}")
     public ResponseEntity<?> getSearchResult(@PathVariable String trackName) {
-
-
         return ResponseEntity.status(HttpStatus.OK).body(searchService.getSearchResult(trackName));
     }
 
