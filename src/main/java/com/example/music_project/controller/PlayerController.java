@@ -71,10 +71,18 @@ public class PlayerController {
         return ResponseEntity.status(HttpStatus.OK).body(skipToNext);
     }
     //사용자 큐 가져오기
-//    @GetMapping("userQueue")
-//    public ResponseEntity<?> getUserQueue() {
-//        String userQueue = playerService
-//    }
+    @GetMapping("/userQueue")
+    public ResponseEntity<?> getUserQueue() {
+        String userQueue = playerService.getUserQueue();
+        return ResponseEntity.status(HttpStatus.OK).body(userQueue);
+    }
+
+    //큐에 곡 추가하기
+    @PostMapping("/userQueue/{uri}/{deviceId}")
+    public ResponseEntity<?> postUserQueue(@PathVariable String uri, @PathVariable String deviceId) {
+        String userQueue = playerService.postUserQueue(uri, deviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(userQueue);
+    }
 }
 
 

@@ -26,38 +26,6 @@ import java.util.Map;
 public class PlayerService {
     AccessTokenStore accessTokenStore;
 
-    private String albumEncoding(String response) {
-        String albumHref = "Unknown Device";
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(response);
-            JsonNode deviceIdNode = rootNode.path("tracks").path("href");
-
-            if (deviceIdNode != null && !deviceIdNode.isNull()) {
-                albumHref = deviceIdNode.asText();
-            }
-        } catch (Exception e) {
-            log.error("Error parsing JSON response: ", e);
-        }
-        return albumHref;
-    }
-    private String playerEncoding(String response) {
-        String deviceId = "Unknown Device";
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(response);
-            JsonNode deviceIdNode = rootNode.path("device").path("id");
-
-            if (deviceIdNode != null && !deviceIdNode.isNull()) {
-                deviceId = deviceIdNode.asText();
-            }
-        } catch (Exception e) {
-            log.error("Error parsing JSON response: ", e);
-        }
-        return deviceId;
-    }
-
-
     private HttpHeaders createHeaders() {
         HttpHeaders headers = new HttpHeaders();
         String accessToken = accessTokenStore.getAccessToken();
@@ -106,17 +74,23 @@ public class PlayerService {
         return albumEncoding(response);
     }
 
-
     public String getAllInfo(String href) {
         HttpEntity<String> entity = new HttpEntity<>(createHeaders());
         return sendRequest(href, HttpMethod.GET, entity);
     }
 
-//    public String getUserQueue() {
-//        String url = "https://api.spotify.com/v1/me/player/queue";
-//        String response = sendRequest(url, HttpMethod.GET, "");
-//        return response;
-//    }
+    public String getUserQueue() {
+        String url = "https://api.spotify.com/v1/me/player/queue";
+        HttpEntity<String> entity = new HttpEntity<>(createHeaders());
+        return sendRequest(url, HttpMethod.GET, entity);
+    }
+
+    public String postUserQueue(String uri, String deviceId) {
+        String url = "https://api.spotify.com/v1/me/player/queue?uri=" + uri + "&device_id=" + deviceId;
+        HttpEntity<String> entity = new HttpEntity<>(createHeaders());
+        return sendRequest(url, HttpMethod.POST, entity);
+    }
+
 
     public String playPause(String deviceId) {
         String url = "https://api.spotify.com/v1/me/player/pause?device_id=" + deviceId;
@@ -145,6 +119,38 @@ public class PlayerService {
         String url = "https://api.spotify.com/v1/me/player/shuffle?state=" + state + "&device_id=" + deviceId;
         HttpEntity<String> entity = new HttpEntity<>(createHeaders());
         return sendRequest(url, HttpMethod.PUT, entity);
+    }
+
+
+    private String albumEncoding(String response) {
+        String albumHref = "Unknown Device";
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response);
+            JsonNode deviceIdNode = rootNode.path("tracks").path("href");
+
+            if (deviceIdNode != null && !deviceIdNode.isNull()) {
+                albumHref = deviceIdNode.asText();
+            }
+        } catch (Exception e) {
+            log.error("Error parsing JSON response: ", e);
+        }
+        return albumHref;
+    }
+    private String playerEncoding(String response) {
+        String deviceId = "Unknown Device";
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response);
+            JsonNode deviceIdNode = rootNode.path("device").path("id");
+
+            if (deviceIdNode != null && !deviceIdNode.isNull()) {
+                deviceId = deviceIdNode.asText();
+            }
+        } catch (Exception e) {
+            log.error("Error parsing JSON response: ", e);
+        }
+        return deviceId;
     }
 
 }
