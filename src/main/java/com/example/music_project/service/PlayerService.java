@@ -40,13 +40,19 @@ public class PlayerService {
         RestTemplate restTemplate = new RestTemplate();
         try {
             ResponseEntity<String> response = restTemplate.exchange(url, method, entity, String.class);
-            log.info(response.getBody());
             return response.getBody();
         } catch (HttpClientErrorException e) {
             log.error("Error with " + method + " request: ", e);
             return "Error: " + e.getMessage();
         }
     }
+
+    public String getRecentlyPlayed() {
+        String url = "https://api.spotify.com/v1/me/player/recently-played?limit=3";
+        HttpEntity<String> entity = new HttpEntity<>(createHeaders());
+        return sendRequest(url, HttpMethod.GET, entity);
+    }
+
 
     public String skipToPrevious(String deviceId) {
         String url = "https://api.spotify.com/v1/me/player/previous?device_id=" + deviceId;

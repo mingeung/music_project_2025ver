@@ -83,6 +83,13 @@ public class PlayerController {
         String userQueue = playerService.postUserQueue(uri, deviceId);
         return ResponseEntity.status(HttpStatus.OK).body(userQueue);
     }
+
+    //최근 들은 곡 불러오기
+    @GetMapping("/recentlyPlayed")
+    public ResponseEntity<?> getRecentlyPlayed() {
+        String recentlyPlayList = playerService.getRecentlyPlayed();
+        return ResponseEntity.status(HttpStatus.OK).body(recentlyPlayList);
+    }
 }
 
 
