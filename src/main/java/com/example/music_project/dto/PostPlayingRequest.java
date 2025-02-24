@@ -10,12 +10,13 @@ public class PostPlayingRequest {
     public LocalDateTime date;
     public String artistName;
     public String trackName;
+    public String artistId;
 
-    public PostPlayingRequest(String trackId, String memberId, LocalDateTime date, String artistName, String trackName) {
+    public PostPlayingRequest(String trackId,  LocalDateTime date, String artistName, String artistId,String trackName) {
         this.trackId = trackId;
-//        this.memberId = memberId;
         this.date = date;
         this.artistName = artistName;
+        this.artistId = artistId;
         this.trackName = trackName;
     }
 }

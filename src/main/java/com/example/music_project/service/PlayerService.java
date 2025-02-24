@@ -42,7 +42,6 @@ public class PlayerService {
             ResponseEntity<String> response = restTemplate.exchange(url, method, entity, String.class);
             return response.getBody();
         } catch (HttpClientErrorException e) {
-            log.error("Error with " + method + " request: ", e);
             return "Error: " + e.getMessage();
         }
     }

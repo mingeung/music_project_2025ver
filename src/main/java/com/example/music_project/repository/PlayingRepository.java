@@ -25,7 +25,7 @@ public class PlayingRepository {
     public EntityManager em; //entity(테이블)을 관리
 
     @Transactional //오류가 나면 처음부터 다시
-    public String addToPlaying(String trackId, LocalDateTime date, String artistName, String trackName, String memberId) {
+    public String addToPlaying(String trackId, LocalDateTime date, String artistName, String artistId, String trackName, String memberId) {
         //유효한 값인지 확인
         validationService.validTrackId(trackId);
         validationService.validMemberId(memberId);
@@ -34,9 +34,8 @@ public class PlayingRepository {
         playing.trackId = trackId;
         playing.trackName = trackName;
         playing.artistName = artistName;
+        playing.artistId = artistId;
 
-        log.info("trackId: "+ trackId);
-        log.info("회원Id: "+ memberId);
         Member member = em.find(Member.class, memberId); //String으로 받아온 memberId를 Member class로 바꿔주기
         playing.member = member;
 
@@ -88,20 +87,23 @@ public class PlayingRepository {
         int currentYear = LocalDate.now().getYear();
 
         List<MostPlayedArtist> monthPlayedArtist = em.createQuery(
-                        "select f.artistName, count(f.artistName) as playCount from Playing f " +
-                                "where f.member.id = :memberId " +
-                                "and YEAR(f.date) = :currentYear " +
-                                "and MONTH(f.date) = :currentMonth " +
-                                "group by f.artistName " +
-                                "order by playCount desc"
-                        , MostPlayedArtist.class)
+                        "SELECT new com.example.music_project.dto.MostPlayedArtist(f.artistName, f.artistId, COUNT(f.artistName)) " +
+                                "FROM Playing f " +
+                                "WHERE f.member.id = :memberId " +
+                                "AND YEAR(f.date) = :currentYear " +
+                                "AND MONTH(f.date) = :currentMonth " +
+                                "GROUP BY f.artistName, f.artistId " +
+                                "ORDER BY COUNT(f.artistName) DESC",
+                        MostPlayedArtist.class)
                 .setParameter("memberId", memberId)
                 .setParameter("currentYear", currentYear)
                 .setParameter("currentMonth", currentMonth)
-                .setMaxResults(1) // 가장 많이 들은 곡 1개
+                .setMaxResults(1)
                 .getResultList();
+
         return monthPlayedArtist;
     }
+
 
 
     //주간 들은 곡

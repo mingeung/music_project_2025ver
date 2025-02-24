@@ -22,7 +22,6 @@ import java.util.Map;
 @Log4j2
 public class PlayingController {
     PlayingRepository playingRepository;
-    SpotifyAuthService spotifyAuthService;
 
     private PlayingService playingService;
 
@@ -33,8 +32,6 @@ public class PlayingController {
         String memberId = map.get("id").toString();
 
         String trackId = playingService.addToPlay(postPlayingRequest, memberId);
-
-
 
         return ResponseEntity.status(HttpStatus.CREATED).body(trackId);
     }

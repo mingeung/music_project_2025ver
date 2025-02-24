@@ -12,7 +12,7 @@ public class PlayingService {
 //    PostPlayingRequest postPlayingRequest;
 
     public String addToPlay(PostPlayingRequest postPlayingRequest, String memberId) {
-        String trackId = playingRepository.addToPlaying(postPlayingRequest.trackId, postPlayingRequest.date, postPlayingRequest.artistName, postPlayingRequest.trackName, memberId);
+        String trackId = playingRepository.addToPlaying(postPlayingRequest.trackId, postPlayingRequest.date, postPlayingRequest.artistName,postPlayingRequest.artistId, postPlayingRequest.trackName, memberId);
         return trackId;
     }
 }
