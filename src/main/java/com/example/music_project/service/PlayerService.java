@@ -1,7 +1,5 @@
 package com.example.music_project.service;
 
-
-import com.example.music_project.OAuth2AuthenticationSuccessHandler;
 import com.example.music_project.properties.AccessTokenStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,15 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Service
 @AllArgsConstructor
 @Log4j2
-
 
 public class PlayerService {
     AccessTokenStore accessTokenStore;
@@ -52,7 +44,6 @@ public class PlayerService {
         return sendRequest(url, HttpMethod.GET, entity);
     }
 
-
     public String skipToPrevious(String deviceId) {
         String url = "https://api.spotify.com/v1/me/player/previous?device_id=" + deviceId;
         HttpEntity<String> entity = new HttpEntity<>(createHeaders());
@@ -67,7 +58,7 @@ public class PlayerService {
     }
 
     public String getPlaybackState() {
-        String url = "https://api.spotify.com/v1/me/player?market=KR";
+        String url = "https://api.spotify.com/v1/me/player";
         HttpEntity<String> entity = new HttpEntity<>(createHeaders());
         return sendRequest(url, HttpMethod.GET, entity);
     }
@@ -96,22 +87,29 @@ public class PlayerService {
         return sendRequest(url, HttpMethod.POST, entity);
     }
 
-
     public String playPause(String deviceId) {
         String url = "https://api.spotify.com/v1/me/player/pause?device_id=" + deviceId;
         HttpEntity<String> entity = new HttpEntity<>(createHeaders());
         return sendRequest(url, HttpMethod.PUT, entity);
     }
 
+    public String  seekToPosition( Integer positionMs, String deviceId) {
+        String url = "https://api.spotify.com/v1/me/player/seek?position_ms=" + positionMs + "&device_id=" + deviceId;
+        HttpEntity<String> entity = new HttpEntity<>(createHeaders());
+        return sendRequest(url, HttpMethod.PUT, entity);
+    }
 
-    public String playStart(String deviceId, String uris) {
+    public String playStart(String deviceId, String uris, Integer positionMs) {
         String url = "https://api.spotify.com/v1/me/player/play?device_id=" + deviceId;
         JSONObject requestBody = new JSONObject();
         requestBody.put("uris", uris.split(","));
-
+        if (positionMs != null) {
+            requestBody.put("position_ms", positionMs);
+        }
         HttpEntity<String> entity = new HttpEntity<>(requestBody.toString(), createHeaders());
-        return sendRequest(url,HttpMethod.PUT,  entity);
+        return sendRequest(url, HttpMethod.PUT, entity);
     }
+
 
 
     public String repeatMode(String deviceId, String state) {
@@ -125,7 +123,6 @@ public class PlayerService {
         HttpEntity<String> entity = new HttpEntity<>(createHeaders());
         return sendRequest(url, HttpMethod.PUT, entity);
     }
-
 
     private String albumEncoding(String response) {
         String albumHref = "Unknown Device";
@@ -142,5 +139,4 @@ public class PlayerService {
         }
         return albumHref;
     }
-
 }

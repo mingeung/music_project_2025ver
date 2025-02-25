@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -34,7 +35,9 @@ public class PlayerController {
     @PutMapping("playStart/{deviceId}")
     public ResponseEntity<?> startPlaying(@PathVariable String deviceId, @RequestBody PutPlayStart putPlayStart) {
         String uris = putPlayStart.uris;
-        String playstart = playerService.playStart(deviceId, uris);
+        Integer positionMs = putPlayStart.position_ms;
+        log.info("position: " + positionMs);
+        String playstart = playerService.playStart(deviceId, uris, positionMs);
         return ResponseEntity.status(HttpStatus.OK).body(playstart);
     }
     //play 멈추기
@@ -42,6 +45,12 @@ public class PlayerController {
     public ResponseEntity<?> pausePlaying(@PathVariable String deviceId) {
         String playpause = playerService.playPause(deviceId);
         return ResponseEntity.status(HttpStatus.OK).body(playpause);
+    }
+    //play를 원하는 곳으로 이동하기
+    @PutMapping("seekToPositon/{positionMs}/{deviceId}")
+    public ResponseEntity<?> seekToPositon(@PathVariable Integer positionMs, @PathVariable String deviceId) {
+        String seekToPosition = playerService.seekToPosition(positionMs, deviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(seekToPosition);
     }
     //반복 실행
     @PutMapping("repeatMode/{deviceId}/{state}")
