@@ -39,7 +39,7 @@ public class PlayerService {
     }
 
     public String getRecentlyPlayed() {
-        String url = "https://api.spotify.com/v1/me/player/recently-played?limit=3";
+        String url = "https://api.spotify.com/v1/me/player/recently-played?limit=4";
         HttpEntity<String> entity = new HttpEntity<>(createHeaders());
         return sendRequest(url, HttpMethod.GET, entity);
     }

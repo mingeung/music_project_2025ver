@@ -35,6 +35,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'  //spring security
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' //oauth2
 
+    // ! WebSocket 설정 추가
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    // ! noSQL : mongoDB 사용
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    // ! Spring Security와 Spring Messaging (WebSocket 포함) 보안 기능
+    implementation 'org.springframework.security:spring-security-messaging'
+
 }
 
 allprojects {

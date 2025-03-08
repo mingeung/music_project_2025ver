@@ -25,6 +25,7 @@ public class TrackInfoService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-Type", "application/json");
+        headers.add("Accept-Language", "ko-KR");
 
         HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
@@ -49,7 +50,6 @@ public class TrackInfoService {
     // 트랙 정보 가져오기
     public String getTrackInfo(String trackId) {
         try {
-//            return fetchFromSpotify("tracks/" + trackId);
             return fetchFromSpotify("tracks?ids=" + trackId);
         }
         catch(HttpClientErrorException.BadRequest e) {

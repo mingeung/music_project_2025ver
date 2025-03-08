@@ -5,13 +5,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 @Log4j2
 public class SearchService {
-    SpotifyAuthService spotifyAuthService;
     AccessTokenStore accessTokenStore;
 
     public List<JsonNode> getSearchResult(String trackName) {
-//        String accessToken = spotifyAuthService.accessToken();
         String accessToken = accessTokenStore.getAccessToken();
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -34,8 +29,6 @@ public class SearchService {
 
         String body = "";
 
-        //추가한 부분
-//        String encodedTrackName = URLEncoder.encode(trackName, StandardCharsets.UTF_8);
         String url = "https://api.spotify.com/v1/search?q=" + trackName + "&type=track" + "&market=KR";
 
         HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
@@ -46,9 +39,7 @@ public class SearchService {
 
 
         String response = responseEntity.getBody();
-        //추가
-
-
+        
         List<JsonNode> tracks = getTrackItems(response);
 
         return tracks;
